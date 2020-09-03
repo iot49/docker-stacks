@@ -1,9 +1,9 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-ARG BASE_CONTAINER=jupyter/minimal-notebook
+ARG BASE_CONTAINER=ttmetro/minimal-notebook
 FROM $BASE_CONTAINER
 
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
+LABEL maintainer="IoT49 Project <boser@berkeley.edu>"
 
 USER root
 
@@ -12,10 +12,9 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends ffmpeg dvipng && \
     rm -rf /var/lib/apt/lists/*
 
-USER $NB_UID
-
 # Install Python 3 packages
-RUN conda install --quiet --yes \
+RUN pip install --upgrade pip && \
+    pip install --no-warn-script-location \
     'beautifulsoup4=4.9.*' \
     'conda-forge::blas=*=openblas' \
     'bokeh=2.1.*' \
@@ -47,7 +46,6 @@ RUN conda install --quiet --yes \
     'widgetsnbextension=3.5.*'\
     'xlrd=1.2.*' \
     && \
-    conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     # Also activate ipywidgets extension for JupyterLab
@@ -61,8 +59,9 @@ RUN conda install --quiet --yes \
     npm cache clean --force && \
     rm -rf "/home/${NB_USER}/.cache/yarn" && \
     rm -rf "/home/${NB_USER}/.node-gyp" && \
-    fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
+
+USER $NB_UID
 
 # Install facets which does not have a pip or conda package at the moment
 WORKDIR /tmp

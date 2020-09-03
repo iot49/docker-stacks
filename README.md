@@ -43,15 +43,17 @@ services:
         volumes:
             - <folder on host where notebooks will be stored>:/home/jovyan/work
         ports:
-            - "8888:8888"                    # jupyter
+            - "8888:8888"
         restart: on-failure
 
 ```
 
 ## Limitations
 
-- No version control for installed libraries. Library versions change from build to build and may differ for different architectures of the same image.
-- Automated tests performed only on the linux/amd64 image. The multi-architecture image is pushed to DockerHub without automated tests.
+- No version control for installed libraries. Library versions change from build to build and may differ for different architectures of the same image. Specify a tag with the docker image to get consistent results.
+- Some packages included with the [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/) are missing. Either install from the command line or raise an issue.
+- Run `pip list` and `apt list` from the command line for a listing of installed packages and their versions.
+- Automated tests performed only on the linux/amd64 image (currently disabled!). The multi-architecture image is pushed to DockerHub without automated tests.
 
 ## Resources
 
