@@ -30,8 +30,8 @@ build/%: ## build the latest image for a stack
 	@echo -n "Built image size: "
 	@docker images $(OWNER)/$(notdir $@):latest --format "{{.Size}}"
 
-build-all: $(foreach I,$(ALL_IMAGES) build/$(I) ) ## build all stacks
-build-test-all: $(foreach I,$(ALL_IMAGES) build/$(I) test/$(I) ) ## build and test all stacks
+build-all: $(foreach I,$(ALL_IMAGES),$(I) build/$(I) ) ## build all stacks
+build-test-all: $(foreach I,$(ALL_IMAGES),$(I) build/$(I) test/$(I) ) ## build and test all stacks
 
 check-outdated/%: ## check the outdated packages in a stack and produce a report (experimental)
 	@TEST_IMAGE="$(OWNER)/$(notdir $@)" pytest test/test_outdated.py
