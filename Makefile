@@ -14,6 +14,10 @@ ALL_STACKS:=base-notebook
 
 ALL_IMAGES:=$(ALL_STACKS)
 
+# Docker buildx platforms
+# PLATFORMS:="linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64"
+PLATFORMS:="linux/amd64"
+
 # Linter
 HADOLINT="${HOME}/hadolint"
 HADOLINT_VERSION="v1.18.0"
@@ -42,14 +46,20 @@ build/%: ## build the latest image for a stack
 	@echo -n "Built image size: "
 	@docker images $(OWNER)/$(notdir $@):latest --format "{{.Size}}"
 
+build-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) build/$(I) ) ## build all stacks
+build-test-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) build/$(I) test/$(I) ) ## build and test all stacks
+
 buildx/%: DARGS?=
 buildx/%: ## build the latest multi-arch image for a stack
-	docker buildx build $(DARGS) --rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
+	docker buildx build $(DARGS) \
+		--platform $(PLATFORMS) \
+		--output "type=image,push=false" \
+		--rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
 	@echo -n "Built image size: "
 	@docker images $(OWNER)/$(notdir $@):latest --format "{{.Size}}"
 
-build-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) build/$(I) ) ## build all stacks
-build-test-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) build/$(I) test/$(I) ) ## build and test all stacks
+buildx-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx/$(I) ) ## build all stacks
+buildx-test-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx/$(I) test/$(I) ) ## build and test all stacks
 
 check-outdated/%: ## check the outdated packages in a stack and produce a report (experimental)
 	@TEST_IMAGE="$(OWNER)/$(notdir $@)" pytest test/test_outdated.py
