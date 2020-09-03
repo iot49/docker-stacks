@@ -29,10 +29,10 @@ RUN pip install --upgrade pip && \
     'dask==2.20.*' \
     'dill==0.3.*' \
     'h5py==2.10.*' \
-    'hdf5' \
+    # 'hdf5' \
     'ipywidgets==7.5.*' \
     'ipympl==0.5.*'\
-    'matplotlib-base==3.2.*' \
+    'matplotlib' \
     # numba update to 0.49 fails resolving deps.
     'numba==0.48.*' \
     'numexpr==2.7.*' \
