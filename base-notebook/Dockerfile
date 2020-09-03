@@ -31,6 +31,7 @@ RUN apt-get update \
     libfreetype6-dev \
     libpng-dev \
     cmake \
+    nodejs \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
@@ -80,7 +81,7 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
 
 # hadolint ignore=DL3013,DL3016
 RUN pip install --upgrade pip && \
-    pip install --no-warn-script-location nodejs readline ipywidgets jupyter jupyterlab && \
+    pip install --no-warn-script-location readline ipywidgets jupyter jupyterlab && \
     jupyter notebook --generate-config && \
     fix-permissions /home/$NB_USER
 
