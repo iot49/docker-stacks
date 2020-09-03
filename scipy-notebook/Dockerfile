@@ -64,8 +64,6 @@ RUN pip install --upgrade pip && \
     rm -rf "/home/${NB_USER}/.node-gyp" && \
     fix-permissions "/home/${NB_USER}"
 
-USER $NB_UID
-
 # Install facets which does not have a pip or conda package at the moment
 WORKDIR /tmp
 RUN git clone https://github.com/PAIR-code/facets.git && \
