@@ -5,7 +5,7 @@
 # Use bash for inline if-statements in arch_patch target
 SHELL:=bash
 ARCH:=$(shell uname -m)
-OWNER?=jupyter
+OWNER?=ttmetro
 
 # Need to list the images in build dependency order
 ALL_STACKS:=base-notebook

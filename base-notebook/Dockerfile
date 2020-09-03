@@ -31,7 +31,12 @@ RUN apt-get update \
     libfreetype6-dev \
     libpng-dev \
     cmake \
-    nodejs \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install javascript
+RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g yarn \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
