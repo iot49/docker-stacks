@@ -13,6 +13,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python 3 packages
+# hadolint ignore=DL3013
 RUN pip install --upgrade pip && \
     pip install --no-warn-script-location \
     'beautifulsoup4=4.9.*' \
