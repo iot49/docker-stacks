@@ -89,6 +89,10 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
 # hadolint ignore=DL3013,DL3016
 RUN pip install --upgrade pip && \
     pip install --no-warn-script-location readline ipywidgets jupyter jupyterlab && \
+    pip install --no-warn-script-location \
+        async-generator backcall blinker cryptography importlib-metadata oauthlib \
+        pamela pycosat pycurl python-editor python-json-logger requests SQLAlchemy \
+    && \
     jupyter notebook --generate-config && \
     fix-permissions /home/$NB_USER
 
