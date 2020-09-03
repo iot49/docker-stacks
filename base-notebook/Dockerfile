@@ -85,8 +85,7 @@ RUN mkdir /home/$NB_USER/work && \
 # Install Jupyter Notebook, Lab, and Hub
 # Generate a notebook server config
 
-# hadolint ignore=DL3013
-# hadolint ignore=DL3016
+# hadolint ignore=DL3013,DL3016
 RUN pip install --upgrade pip && \
     pip install nodejs readline ipywidgets jupyter jupyterlab && \
     npm install -g yarn && \
