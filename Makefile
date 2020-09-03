@@ -42,6 +42,12 @@ build/%: ## build the latest image for a stack
 	@echo -n "Built image size: "
 	@docker images $(OWNER)/$(notdir $@):latest --format "{{.Size}}"
 
+buildx/%: DARGS?=
+buildx/%: ## build the latest multi-arch image for a stack
+	docker buildx build $(DARGS) --rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
+	@echo -n "Built image size: "
+	@docker images $(OWNER)/$(notdir $@):latest --format "{{.Size}}"
+
 build-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) build/$(I) ) ## build all stacks
 build-test-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) build/$(I) test/$(I) ) ## build and test all stacks
 
