@@ -52,7 +52,7 @@ build-test-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) build/$(I) test/$(I) )
 buildx-amd64/%: DARGS?=
 buildx-amd64/%: ## buildx for linux/amd64 single architecture, image stored locally
 	docker buildx build $(DARGS) \
-		--platform linux/amd64 --load
+		--platform linux/amd64 --load \
 		--rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
 	@echo -n "Built image size: "
 	@docker images $(OWNER)/$(notdir $@):latest --format "{{.Size}}"
@@ -63,7 +63,7 @@ buildx-test-all-amd64: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx-amd64/$(
 buildx/%: DARGS?=
 buildx/%: ## ## buildx for $(PLATORMS) multi-architecture, image pushed to DockerHub
 	docker buildx build $(DARGS) \
-		--platform $(PLATFORMS) --push
+		--platform $(PLATFORMS) --push \
 		--rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
 	@echo -n "Built image size: "
 	@docker images $(OWNER)/$(notdir $@):latest --format "{{.Size}}"

@@ -12,7 +12,7 @@ do not support ARM processors.
 
 This fork is an attempt to port a subset of the official stacks to a multi-architecture docker configuration. The main obstacle is the lack of good support for Conda on ARM.
 
-If you do not want to run notebook servers on ARM computers, use the [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/).
+If you do not need to run notebook servers on ARM computers, use the [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/).
 
 ## Alternatives
 
@@ -23,6 +23,11 @@ If you do not want to run notebook servers on ARM computers, use the [Official J
   building/building artifacts from source and injecting into docker images
 - [jupyter-on-openshift/jupyter-notebooks](https://github.com/jupyter-on-openshift/jupyter-notebooks) -
   OpenShift compatible S2I builder for basic notebook images
+
+## Limitations
+
+- No version control for installed libraries. Library versions change from build to build and may differ for different architectures of the same image.
+- Automated tests performed only on the linux/amd64 image. The multi-architecture image is pushed to DockerHub without automated tests.
 
 ## Resources
 
