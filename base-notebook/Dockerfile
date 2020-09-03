@@ -86,6 +86,7 @@ RUN mkdir /home/$NB_USER/work && \
 # Generate a notebook server config
 
 # hadolint ignore=DL3013
+# hadolint ignore=DL3016
 RUN pip install --upgrade pip && \
     pip install nodejs readline ipywidgets jupyter jupyterlab && \
     npm install -g yarn && \
