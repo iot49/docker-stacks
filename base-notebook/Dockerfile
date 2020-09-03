@@ -86,9 +86,15 @@ RUN mkdir /home/$NB_USER/work && \
 # Generate a notebook server config
 
 # hadolint ignore=DL3013,DL3016
-RUN pip install --upgrade pip && \
-    pip install nodejs readline ipywidgets jupyter jupyterlab && \
-    npm install -g yarn && \
+RUN pip install --upgrade pip
+RUN pip install nodejs 
+RUN pip install readline
+RUN pip install ipywidgets
+RUN pip install jupyter
+RUN pip install jupyterlab
+
+# hadolint ignore=DL3013,DL3016
+RUN npm install -g yarn && \
     jupyter notebook --generate-config && \
     fix-permissions /home/$NB_USER
 
