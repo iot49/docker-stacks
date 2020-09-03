@@ -81,7 +81,7 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
 # hadolint ignore=DL3013,DL3016
 RUN pip install --upgrade pip && \
     pip install --no-warn-script-location nodejs readline ipywidgets jupyter jupyterlab && \
-    nmp install -g yarn && \
+    npm install -g yarn && \
     jupyter notebook --generate-config && \
     fix-permissions /home/$NB_USER
 

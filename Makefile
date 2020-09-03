@@ -60,9 +60,6 @@ buildx-amd64/%: ## buildx for linux/amd64 single architecture, image stored loca
 buildx-all-amd64: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx-amd64/$(I) ) ## build all stacks
 buildx-test-all-amd64: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx-amd64/$(I) test/$(I) ) ## build and test all stacks
 
-# Error "rpc error: code = Unknown desc = failed to build"
-# Apparently due to insufficient ram:
-# https://stackoverflow.com/questions/59868448/rpc-error-code-unknown-desc-failed-to-build-llb
 buildx/%: DARGS?=
 buildx/%: ## buildx for $(PLATORMS) multi-architecture, image pushed to DockerHub
 	docker buildx build $(DARGS) \
