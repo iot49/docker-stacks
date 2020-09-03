@@ -75,25 +75,21 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     chmod g+w /etc/passwd && \
     fix-permissions $HOME
 
+# Install Jupyter Notebook, Lab, and Hub
+# Generate a notebook server config
+
+# hadolint ignore=DL3013,DL3016
+RUN pip install --upgrade pip && \
+    pip install --no-warn-script-location nodejs readline ipywidgets jupyter jupyterlab && \
+    nmp install -g yarn && \
+    jupyter notebook --generate-config && \
+    fix-permissions /home/$NB_USER
+
 USER $NB_UID
 WORKDIR $HOME
 
 # Setup work directory for backward-compatibility
 RUN mkdir /home/$NB_USER/work && \
-    fix-permissions /home/$NB_USER
-
-# Install Jupyter Notebook, Lab, and Hub
-# Generate a notebook server config
-
-# docker fails with "rpc error: code = Unknown desc = executor failed"
-# if these are on single lines???
-# see https://stackoverflow.com/questions/59868448/rpc-error-code-unknown-desc-failed-to-build-llb
-# nodejs readline ipywidgets 
-
-# hadolint ignore=DL3013,DL3016
-RUN pip install --upgrade pip && \
-    pip install --no-warn-script-location jupyter jupyterlab && \
-    jupyter notebook --generate-config && \
     fix-permissions /home/$NB_USER
 
 EXPOSE 8888
