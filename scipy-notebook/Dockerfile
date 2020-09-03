@@ -13,14 +13,16 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python 3 packages
-# hadolint ignore=DL3013
+# hadolint ignore=DL3013,SC1097
 RUN pip install --upgrade pip && \
     pip install --no-warn-script-location \
     'beautifulsoup4==4.9.*'
+# hadolint ignore=DL3013,SC1097
 RUN pip install --no-warn-script-location \
     'pythran-openblas==0.3.6' \
     'bokeh==2.1.*' \
     'bottleneck==1.3.*'
+# hadolint ignore=DL3013,SC1097
 RUN pip install --no-warn-script-location \
     'cloudpickle==1.5.*' \
     'cython==0.29.*' \
@@ -29,6 +31,7 @@ RUN pip install --no-warn-script-location \
     'h5py==2.10.*' \
     'hdf5==1.10.*' \
     'ipywidgets==7.5.*'
+# hadolint ignore=DL3013,SC1097
 RUN pip install --no-warn-script-location \
     'ipympl==0.5.*'\
     'matplotlib-base==3.2.*' \
@@ -37,6 +40,7 @@ RUN pip install --no-warn-script-location \
     'numexpr==2.7.*' \
     'pandas==1.1.*' \
     'patsy==0.5.*'
+# hadolint ignore=DL3013,SC1097
 RUN pip install --no-warn-script-location \
     'protobuf==3.12.*' \
     'pytables==3.6.*' \
@@ -44,16 +48,14 @@ RUN pip install --no-warn-script-location \
     'scikit-learn==0.23.*' \
     'scipy==1.5.*' \
     'seaborn==0.10.*'
-RUN pip install --no-warn-script-location \
-    'sqlalchemy==1.3.*' \
-    'statsmodels==0.11.*' \
-    'sympy==1.6.*'
+# hadolint ignore=DL3013,SC1097
 RUN pip install --no-warn-script-location \
     'vincent==0.4.*' \
     'widgetsnbextension==3.5.*'\
     'xlrd==1.2.*'
     # && \
     # Activate ipywidgets extension in the environment that runs the notebook server
+
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     # Also activate ipywidgets extension for JupyterLab
     # Check this URL for most recent compatibilities
