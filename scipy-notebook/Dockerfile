@@ -19,6 +19,7 @@ RUN apt-get update && \
 # hadolint ignore=DL3013
 RUN pip install --upgrade pip && \
     pip install --no-warn-script-location \
+    # requests numpy scipy scikit-learn nltk pandas seaborn tables matplotlib
     'beautifulsoup4==4.9.*' \
     # I don't know how to install or use this
     # 'pythran-openblas==0.3.6' \
@@ -43,6 +44,7 @@ RUN pip install --upgrade pip && \
     'scikit-learn==0.23.*' \
     'scipy==1.5.*' \
     'seaborn==0.10.*' \
+    'tables' \
     'vincent==0.4.*' \
     'widgetsnbextension==3.5.*' \
     'xlrd==1.2.*' \
@@ -69,7 +71,6 @@ WORKDIR /tmp
 RUN git clone https://github.com/PAIR-code/facets.git && \
     jupyter nbextension install facets/facets-dist/ --sys-prefix && \
     rm -rf /tmp/facets && \
-    fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
 # Import matplotlib the first time to build the font cache.
