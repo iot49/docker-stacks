@@ -17,8 +17,8 @@ RUN apt-get update && \
 
 # Install Python 3 packages
 # hadolint ignore=DL3013
-RUN pip install --upgrade pip && \
-    pip install --no-warn-script-location \
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir --no-warn-script-location \
     # requests numpy scipy scikit-learn nltk pandas seaborn tables matplotlib
     'beautifulsoup4==4.9.*' \
     # I don't know how to install or use this
