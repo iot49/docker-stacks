@@ -18,6 +18,7 @@ If you do not need to run notebook servers on ARM computers, use the [Official J
 
 - base-notebook
 - minimal-notebook
+- scipy-notebook
 
 ## Quick Start
 
