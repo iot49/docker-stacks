@@ -5,12 +5,12 @@
 # Use bash for inline if-statements in arch_patch target
 SHELL:=bash
 ARCH:=$(shell uname -m)
-OWNER?=ttmetro
+OWNER?=jupyter
 
 # Need to list the images in build dependency order
-ALL_STACKS:=base-notebook \
-	minimal-notebook \
-	scipy-notebook
+ALL_STACKS:=base-notebook
+#	minimal-notebook \
+#	scipy-notebook
 
 ALL_IMAGES:=$(ALL_STACKS)
 
@@ -26,9 +26,25 @@ help:
 	@echo
 	@grep -E '^[a-zA-Z0-9_%/-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+arch_patch/%: ## apply hardware architecture specific patches to the Dockerfile
+	@if [ -e ./$(notdir $@)/Dockerfile.$(ARCH).patch ]; then \
+		if [ -e ./$(notdir $@)/Dockerfile.orig ]; then \
+               		cp -f ./$(notdir $@)/Dockerfile.orig ./$(notdir $@)/Dockerfile;\
+		else\
+                	cp -f ./$(notdir $@)/Dockerfile ./$(notdir $@)/Dockerfile.orig;\
+		fi;\
+		patch -f ./$(notdir $@)/Dockerfile ./$(notdir $@)/Dockerfile.$(ARCH).patch; \
+	fi
+	
 build/%: DARGS?=
 build/%: ## build the latest image for a stack
 	docker build $(DARGS) --rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
+	@echo -n "Built image size: "
+	@docker images $(OWNER)/$(notdir $@):latest --format "{{.Size}}"
+
+buildx/%: DARGS?=
+buildx/%: ## build the latest multi-arch image for a stack
+	docker buildx build $(DARGS) --rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
 	@echo -n "Built image size: "
 	@docker images $(OWNER)/$(notdir $@):latest --format "{{.Size}}"
 
@@ -110,7 +126,7 @@ lint/%: ## lint the dockerfile(s) for a stack
 
 lint-all: $(foreach I,$(ALL_IMAGES),lint/$(I) ) ## lint all stacks
 
-lint-build-test-all: $(foreach I,$(ALL_IMAGES),lint/$(I) arch_patch/$(I) build/$(I) test/$(I) ) ## lint, build and test all stacks
+lint-build-test-all: $(foreach I,$(ALL_IMAGES),lint/$(I) build/$(I) test/$(I) ) ## lint, build and test all stacks
 
 lint-install: ## install hadolint
 	@echo "Installing hadolint at $(HADOLINT) ..."
