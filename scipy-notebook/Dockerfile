@@ -1,9 +1,9 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-ARG BASE_CONTAINER==ttmetro/minimal-notebook
+ARG BASE_CONTAINER=ttmetro/minimal-notebook
 FROM $BASE_CONTAINER
 
-LABEL maintainer=="IoT49 Project <boser@berkeley.edu>"
+LABEL maintainer="IoT49 Project <boser@berkeley.edu>"
 
 USER root
 
@@ -17,12 +17,12 @@ RUN apt-get update && \
 RUN pip install --upgrade pip && \
     pip install --no-warn-script-location \
     'beautifulsoup4==4.9.*'
-# hadolint ignore=DL3013,SC1097
+# hadolint ignore=DL3013
 RUN pip install --no-warn-script-location \
     'pythran-openblas==0.3.6' \
     'bokeh==2.1.*' \
     'bottleneck==1.3.*'
-# hadolint ignore=DL3013,SC1097
+# hadolint ignore=DL3013
 RUN pip install --no-warn-script-location \
     'cloudpickle==1.5.*' \
     'cython==0.29.*' \
@@ -31,7 +31,7 @@ RUN pip install --no-warn-script-location \
     'h5py==2.10.*' \
     'hdf5==1.10.*' \
     'ipywidgets==7.5.*'
-# hadolint ignore=DL3013,SC1097
+# hadolint ignore=DL3013
 RUN pip install --no-warn-script-location \
     'ipympl==0.5.*'\
     'matplotlib-base==3.2.*' \
@@ -40,7 +40,7 @@ RUN pip install --no-warn-script-location \
     'numexpr==2.7.*' \
     'pandas==1.1.*' \
     'patsy==0.5.*'
-# hadolint ignore=DL3013,SC1097
+# hadolint ignore=DL3013
 RUN pip install --no-warn-script-location \
     'protobuf==3.12.*' \
     'pytables==3.6.*' \
@@ -48,7 +48,7 @@ RUN pip install --no-warn-script-location \
     'scikit-learn==0.23.*' \
     'scipy==1.5.*' \
     'seaborn==0.10.*'
-# hadolint ignore=DL3013,SC1097
+# hadolint ignore=DL3013
 RUN pip install --no-warn-script-location \
     'vincent==0.4.*' \
     'widgetsnbextension==3.5.*'\
