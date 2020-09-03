@@ -52,7 +52,7 @@ build-test-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) build/$(I) test/$(I) )
 buildx-amd64/%: DARGS?=
 buildx-amd64/%: ## buildx for linux/amd64 single architecture, image stored locally
 	docker buildx build $(DARGS) \
-		--memory 6G \
+		--memory 8G \
 		--platform linux/amd64 --load \
 		--rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
 	@echo -n "Built image size: "

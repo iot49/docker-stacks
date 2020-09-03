@@ -85,6 +85,10 @@ RUN mkdir /home/$NB_USER/work && \
 # Install Jupyter Notebook, Lab, and Hub
 # Generate a notebook server config
 
+# docker fails with "rpc error: code = Unknown desc = executor failed"
+# if these are on single lines???
+# see https://stackoverflow.com/questions/59868448/rpc-error-code-unknown-desc-failed-to-build-llb
+
 # hadolint ignore=DL3013,DL3016
 RUN pip install --upgrade pip
 # hadolint ignore=DL3013,DL3016
@@ -99,9 +103,9 @@ RUN pip install jupyter
 RUN pip install jupyterlab
 
 # hadolint ignore=DL3013,DL3016
-RUN npm install -g yarn && \
-    jupyter notebook --generate-config && \
-    fix-permissions /home/$NB_USER
+RUN npm install -g yarn
+RUN jupyter notebook --generate-config
+RUN fix-permissions /home/$NB_USER
 
 EXPOSE 8888
 
