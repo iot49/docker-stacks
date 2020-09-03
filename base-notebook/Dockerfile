@@ -87,10 +87,15 @@ RUN mkdir /home/$NB_USER/work && \
 
 # hadolint ignore=DL3013,DL3016
 RUN pip install --upgrade pip
+# hadolint ignore=DL3013,DL3016
 RUN pip install nodejs 
+# hadolint ignore=DL3013,DL3016
 RUN pip install readline
+# hadolint ignore=DL3013,DL3016
 RUN pip install ipywidgets
+# hadolint ignore=DL3013,DL3016
 RUN pip install jupyter
+# hadolint ignore=DL3013,DL3016
 RUN pip install jupyterlab
 
 # hadolint ignore=DL3013,DL3016
