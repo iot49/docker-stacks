@@ -17,6 +17,7 @@ USER root
 
 # Install all OS dependencies for notebook server that starts but lacks all
 # features (e.g., download as all possible file formats)
+
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update \
  && apt-get install -yq --no-install-recommends \
@@ -34,8 +35,9 @@ RUN apt-get update \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install javascript
+# hadolint ignore=DL3016
 RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash - && \
-    apt-get install -y nodejs && \
+    apt-get install -yq --no-install-recommends nodejs && \
     npm install -g yarn \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
