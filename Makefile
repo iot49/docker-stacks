@@ -2,13 +2,15 @@
 # Distributed under the terms of the Modified BSD License.
 .PHONY: docs help test
 
+# Use bash for inline if-statements in arch_patch target
 SHELL:=bash
-OWNER?=ttmetro
+ARCH:=$(shell uname -m)
+OWNER?=jupyter
 
 # Need to list the images in build dependency order
-ALL_STACKS:=base-notebook \
-	minimal-notebook \
-	scipy-notebook
+ALL_STACKS:=base-notebook
+#	minimal-notebook \
+#	scipy-notebook
 
 ALL_IMAGES:=$(ALL_STACKS)
 
@@ -24,14 +26,24 @@ help:
 	@echo
 	@grep -E '^[a-zA-Z0-9_%/-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+arch_patch/%: ## apply hardware architecture specific patches to the Dockerfile
+	@if [ -e ./$(notdir $@)/Dockerfile.$(ARCH).patch ]; then \
+		if [ -e ./$(notdir $@)/Dockerfile.orig ]; then \
+               		cp -f ./$(notdir $@)/Dockerfile.orig ./$(notdir $@)/Dockerfile;\
+		else\
+                	cp -f ./$(notdir $@)/Dockerfile ./$(notdir $@)/Dockerfile.orig;\
+		fi;\
+		patch -f ./$(notdir $@)/Dockerfile ./$(notdir $@)/Dockerfile.$(ARCH).patch; \
+	fi
+	
 build/%: DARGS?=
 build/%: ## build the latest image for a stack
 	docker build $(DARGS) --rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
 	@echo -n "Built image size: "
 	@docker images $(OWNER)/$(notdir $@):latest --format "{{.Size}}"
 
-build-all: $(foreach I,$(ALL_IMAGES),$(I) build/$(I) ) ## build all stacks
-build-test-all: $(foreach I,$(ALL_IMAGES),$(I) build/$(I) test/$(I) ) ## build and test all stacks
+build-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) build/$(I) ) ## build all stacks
+build-test-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) build/$(I) test/$(I) ) ## build and test all stacks
 
 check-outdated/%: ## check the outdated packages in a stack and produce a report (experimental)
 	@TEST_IMAGE="$(OWNER)/$(notdir $@)" pytest test/test_outdated.py
