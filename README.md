@@ -17,18 +17,36 @@ If you do not need to run notebook servers on ARM computers, use the [Official J
 ## Supported Stacks
 
 - base-notebook
+- minimal-notebook
 
 ## Quick Start
 
-## Alternatives
+```bash
+docker -p 8888:8888 ttmetro/base-notebook
+```
 
-- [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/)
-- [jupyter/repo2docker](https://github.com/jupyter/repo2docker) - Turn git repositories into
-  Jupyter-enabled Docker Images
-- [openshift/source-to-image](https://github.com/openshift/source-to-image) - A tool for
-  building/building artifacts from source and injecting into docker images
-- [jupyter-on-openshift/jupyter-notebooks](https://github.com/jupyter-on-openshift/jupyter-notebooks) -
-  OpenShift compatible S2I builder for basic notebook images
+### docker-compose
+
+```
+version: "3"
+
+services:
+
+    iot49:
+        image: ttmetro/base-notebook
+        container_name: jupyter-notebook
+        user: root
+        environment:
+            - JUPYTER_ENABLE_LAB=yes
+            - GRANT_SUDO=yes
+            - NB_UID=1000
+        volumes:
+            - <folder on host where notebooks will be stored>:/home/jovyan/work
+        ports:
+            - "8888:8888"                    # jupyter
+        restart: on-failure
+
+```
 
 ## Limitations
 
