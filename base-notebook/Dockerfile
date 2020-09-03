@@ -88,10 +88,11 @@ RUN mkdir /home/$NB_USER/work && \
 # docker fails with "rpc error: code = Unknown desc = executor failed"
 # if these are on single lines???
 # see https://stackoverflow.com/questions/59868448/rpc-error-code-unknown-desc-failed-to-build-llb
+# nodejs readline ipywidgets 
 
 # hadolint ignore=DL3013,DL3016
 RUN pip install --upgrade pip && \
-    pip install --no-warn-script-location nodejs readline ipywidgets jupyter jupyterlab && \
+    pip install --no-warn-script-location jupyter jupyterlab && \
     jupyter notebook --generate-config && \
     fix-permissions /home/$NB_USER
 
