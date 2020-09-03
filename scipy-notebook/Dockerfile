@@ -1,9 +1,9 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-ARG BASE_CONTAINER=ttmetro/minimal-notebook
+ARG BASE_CONTAINER==ttmetro/minimal-notebook
 FROM $BASE_CONTAINER
 
-LABEL maintainer="IoT49 Project <boser@berkeley.edu>"
+LABEL maintainer=="IoT49 Project <boser@berkeley.edu>"
 
 USER root
 
@@ -16,42 +16,42 @@ RUN apt-get update && \
 # hadolint ignore=DL3013
 RUN pip install --upgrade pip && \
     pip install --no-warn-script-location \
-    'beautifulsoup4=4.9.*'
+    'beautifulsoup4==4.9.*'
 RUN pip install --no-warn-script-location \
-    'pythran-openblas=0.3.6' \
-    'bokeh=2.1.*' \
-    'bottleneck=1.3.*'
+    'pythran-openblas==0.3.6' \
+    'bokeh==2.1.*' \
+    'bottleneck==1.3.*'
 RUN pip install --no-warn-script-location \
-    'cloudpickle=1.5.*' \
-    'cython=0.29.*' \
-    'dask=2.20.*' \
-    'dill=0.3.*' \
-    'h5py=2.10.*' \
-    'hdf5=1.10.*' \
-    'ipywidgets=7.5.*'
+    'cloudpickle==1.5.*' \
+    'cython==0.29.*' \
+    'dask==2.20.*' \
+    'dill==0.3.*' \
+    'h5py==2.10.*' \
+    'hdf5==1.10.*' \
+    'ipywidgets==7.5.*'
 RUN pip install --no-warn-script-location \
-    'ipympl=0.5.*'\
-    'matplotlib-base=3.2.*' \
+    'ipympl==0.5.*'\
+    'matplotlib-base==3.2.*' \
     # numba update to 0.49 fails resolving deps.
-    'numba=0.48.*' \
-    'numexpr=2.7.*' \
-    'pandas=1.1.*' \
-    'patsy=0.5.*'
+    'numba==0.48.*' \
+    'numexpr==2.7.*' \
+    'pandas==1.1.*' \
+    'patsy==0.5.*'
 RUN pip install --no-warn-script-location \
-    'protobuf=3.12.*' \
-    'pytables=3.6.*' \
-    'scikit-image=0.17.*' \
-    'scikit-learn=0.23.*' \
-    'scipy=1.5.*' \
-    'seaborn=0.10.*'
+    'protobuf==3.12.*' \
+    'pytables==3.6.*' \
+    'scikit-image==0.17.*' \
+    'scikit-learn==0.23.*' \
+    'scipy==1.5.*' \
+    'seaborn==0.10.*'
 RUN pip install --no-warn-script-location \
-    'sqlalchemy=1.3.*' \
-    'statsmodels=0.11.*' \
-    'sympy=1.6.*'
+    'sqlalchemy==1.3.*' \
+    'statsmodels==0.11.*' \
+    'sympy==1.6.*'
 RUN pip install --no-warn-script-location \
-    'vincent=0.4.*' \
-    'widgetsnbextension=3.5.*'\
-    'xlrd=1.2.*'
+    'vincent==0.4.*' \
+    'widgetsnbextension==3.5.*'\
+    'xlrd==1.2.*'
     # && \
     # Activate ipywidgets extension in the environment that runs the notebook server
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
@@ -79,9 +79,9 @@ RUN git clone https://github.com/PAIR-code/facets.git && \
     fix-permissions "/home/${NB_USER}"
 
 # Import matplotlib the first time to build the font cache.
-ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
+ENV XDG_CACHE_HOME=="/home/${NB_USER}/.cache/"
 
-RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
+RUN MPLBACKEND==Agg python -c "import matplotlib.pyplot" && \
     fix-permissions "/home/${NB_USER}"
 
 USER $NB_UID
