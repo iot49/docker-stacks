@@ -20,7 +20,7 @@ RUN apt-get update && \
 RUN pip install --upgrade pip && \
     pip install --no-warn-script-location \
     'beautifulsoup4==4.9.*' \
-    # Not available for arm?
+    # I don't know how to install or use this
     # 'pythran-openblas==0.3.6' \
     'bokeh==2.1.*' \
     'bottleneck==1.3.*' \
@@ -29,7 +29,7 @@ RUN pip install --upgrade pip && \
     'dask==2.20.*' \
     'dill==0.3.*' \
     'h5py==2.10.*' \
-    'hdf5==1.10.*' \
+    'hdf5' \
     'ipywidgets==7.5.*' \
     'ipympl==0.5.*'\
     'matplotlib-base==3.2.*' \
