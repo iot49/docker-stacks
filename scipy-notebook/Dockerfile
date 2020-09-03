@@ -9,54 +9,47 @@ USER root
 
 # ffmpeg for matplotlib anim & dvipng for latex labels
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg dvipng && \
+    apt-get install -y --no-install-recommends \
+    # numpy needs these
+    libhdf5-dev liblapack-dev gfortran \
+    ffmpeg dvipng && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python 3 packages
 # hadolint ignore=DL3013
 RUN pip install --upgrade pip && \
     pip install --no-warn-script-location \
-    'beautifulsoup4==4.9.*'
-# hadolint ignore=DL3013
-RUN pip install --no-warn-script-location \
-    'pythran-openblas==0.3.6' \
+    'beautifulsoup4==4.9.*' \
+    # Not available for arm?
+    # 'pythran-openblas==0.3.6' \
     'bokeh==2.1.*' \
-    'bottleneck==1.3.*'
-# hadolint ignore=DL3013
-RUN pip install --no-warn-script-location \
+    'bottleneck==1.3.*' \
     'cloudpickle==1.5.*' \
     'cython==0.29.*' \
     'dask==2.20.*' \
     'dill==0.3.*' \
     'h5py==2.10.*' \
     'hdf5==1.10.*' \
-    'ipywidgets==7.5.*'
-# hadolint ignore=DL3013
-RUN pip install --no-warn-script-location \
+    'ipywidgets==7.5.*' \
     'ipympl==0.5.*'\
     'matplotlib-base==3.2.*' \
     # numba update to 0.49 fails resolving deps.
     'numba==0.48.*' \
     'numexpr==2.7.*' \
     'pandas==1.1.*' \
-    'patsy==0.5.*'
-# hadolint ignore=DL3013
-RUN pip install --no-warn-script-location \
+    'patsy==0.5.*' \
     'protobuf==3.12.*' \
     'pytables==3.6.*' \
     'scikit-image==0.17.*' \
     'scikit-learn==0.23.*' \
     'scipy==1.5.*' \
-    'seaborn==0.10.*'
-# hadolint ignore=DL3013
-RUN pip install --no-warn-script-location \
+    'seaborn==0.10.*' \
     'vincent==0.4.*' \
-    'widgetsnbextension==3.5.*'\
-    'xlrd==1.2.*'
-    # && \
+    'widgetsnbextension==3.5.*' \
+    'xlrd==1.2.*' \
+    && \
     # Activate ipywidgets extension in the environment that runs the notebook server
-
-RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
+    jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     # Also activate ipywidgets extension for JupyterLab
     # Check this URL for most recent compatibilities
     # https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
