@@ -72,3 +72,4 @@ dockerspawner.tar.gz
 .envrc
 .direnv/
 _*/
+docker-compose
