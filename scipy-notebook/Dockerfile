@@ -30,7 +30,6 @@ RUN pip install --upgrade pip && \
     'dill==0.3.*' \
     'h5py==2.10.*' \
     # 'hdf5' \
-    'ipywidgets==7.5.*' \
     'ipympl==0.5.*'\
     'matplotlib' \
     # numba update to 0.49 fails resolving deps.
@@ -39,7 +38,7 @@ RUN pip install --upgrade pip && \
     'pandas==1.1.*' \
     'patsy==0.5.*' \
     'protobuf==3.12.*' \
-    'pytables==3.6.*' \
+    # 'pytables==3.6.*' \
     'scikit-image==0.17.*' \
     'scikit-learn==0.23.*' \
     'scipy==1.5.*' \
