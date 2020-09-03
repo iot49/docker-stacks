@@ -13,7 +13,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python 3 packages
-# hadolint ignore=DL3013,SC1097
+# hadolint ignore=DL3013
 RUN pip install --upgrade pip && \
     pip install --no-warn-script-location \
     'beautifulsoup4==4.9.*'
@@ -81,9 +81,9 @@ RUN git clone https://github.com/PAIR-code/facets.git && \
     fix-permissions "/home/${NB_USER}"
 
 # Import matplotlib the first time to build the font cache.
-ENV XDG_CACHE_HOME=="/home/${NB_USER}/.cache/"
+ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
 
-RUN MPLBACKEND==Agg python -c "import matplotlib.pyplot" && \
+RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
     fix-permissions "/home/${NB_USER}"
 
 USER $NB_UID
