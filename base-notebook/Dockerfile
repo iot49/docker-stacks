@@ -92,15 +92,15 @@ RUN mkdir /home/$NB_USER/work && \
 # hadolint ignore=DL3013,DL3016
 RUN pip install --upgrade pip
 # hadolint ignore=DL3013,DL3016
-RUN pip install nodejs 
+RUN pip install --no-warn-script-location nodejs 
 # hadolint ignore=DL3013,DL3016
-RUN pip install readline
+RUN pip install --no-warn-script-location readline
 # hadolint ignore=DL3013,DL3016
-RUN pip install ipywidgets
+RUN pip install --no-warn-script-location ipywidgets
 # hadolint ignore=DL3013,DL3016
-RUN pip install jupyter
+RUN pip install --no-warn-script-location jupyter
 # hadolint ignore=DL3013,DL3016
-RUN pip install jupyterlab
+RUN pip install --no-warn-script-location jupyterlab
 
 # hadolint ignore=DL3013,DL3016
 # RUN npm install -g yarn
