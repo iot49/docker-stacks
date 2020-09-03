@@ -8,8 +8,8 @@ ARCH:=$(shell uname -m)
 OWNER?=ttmetro
 
 # Need to list the images in build dependency order
-ALL_STACKS:=base-notebook
-#	minimal-notebook
+ALL_STACKS:=base-notebook \
+	minimal-notebook
 #	scipy-notebook
 
 ALL_IMAGES:=$(ALL_STACKS)
