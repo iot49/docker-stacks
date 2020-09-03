@@ -1,12 +1,11 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 
-ARG ROOT_CONTAINER=ubuntu:focal-20200703@sha256:d5a6519d9f048100123c568eb83f7ef5bfcad69b01424f420f17c932b00dea76
+# Modified for multi-architecture build (Conda --> pip).
 
-ARG BASE_CONTAINER=$ROOT_CONTAINER
-FROM $BASE_CONTAINER
+FROM python:3.8-buster
 
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
+LABEL maintainer="IoT49 Project <boser@berkeley.edu>"
 ARG NB_USER="jovyan"
 ARG NB_UID="1000"
 ARG NB_GID="100"
@@ -27,7 +26,11 @@ RUN apt-get update \
     sudo \
     locales \
     fonts-liberation \
-    run-one \
+    libncurses5-dev \
+    libzmq3-dev \
+    libfreetype6-dev \
+    libpng-dev \
+    cmake \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
@@ -42,8 +45,24 @@ ENV CONDA_DIR=/opt/conda \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8
-ENV PATH=$CONDA_DIR/bin:$PATH \
-    HOME=/home/$NB_USER
+ENV HOME=/home/$NB_USER
+
+WORKDIR /tmp
+
+# Install Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
+# https://github.com/kidig/rpi-jupyter-lab/blob/master/Dockerfile
+ENV TINI_VERSION=0.18.0
+ENV CFLAGS="-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37"
+
+ADD https://github.com/krallin/tini/archive/v${TINI_VERSION}.tar.gz v${TINI_VERSION}.tar.gz
+RUN tar zxvf v${TINI_VERSION}.tar.gz \
+        && cd tini-${TINI_VERSION} \
+        && cmake . \
+        && make \
+        && cp tini /usr/bin/. \
+        && cd .. \
+        && rm -rf "./tini-${TINI_VERSION}" \
+        && rm "./v${TINI_VERSION}.tar.gz"
 
 # Copy a script that we will use to correct permissions after running certain commands
 COPY fix-permissions /usr/local/bin/fix-permissions
@@ -58,74 +77,28 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     sed -i.bak -e 's/^%admin/#%admin/' /etc/sudoers && \
     sed -i.bak -e 's/^%sudo/#%sudo/' /etc/sudoers && \
     useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
-    mkdir -p $CONDA_DIR && \
-    chown $NB_USER:$NB_GID $CONDA_DIR && \
     chmod g+w /etc/passwd && \
-    fix-permissions $HOME && \
-    fix-permissions $CONDA_DIR
+    fix-permissions $HOME
 
 USER $NB_UID
 WORKDIR $HOME
-ARG PYTHON_VERSION=default
 
 # Setup work directory for backward-compatibility
 RUN mkdir /home/$NB_USER/work && \
     fix-permissions /home/$NB_USER
 
-# Install conda as jovyan and check the md5 sum provided on the download site
-ENV MINICONDA_VERSION=4.8.3 \
-    MINICONDA_MD5=d63adf39f2c220950a063e0529d4ff74 \
-    CONDA_VERSION=4.8.3
-
-WORKDIR /tmp
-RUN wget --quiet https://repo.continuum.io/miniconda/Miniconda3-py38_${MINICONDA_VERSION}-Linux-x86_64.sh && \
-    echo "${MINICONDA_MD5} *Miniconda3-py38_${MINICONDA_VERSION}-Linux-x86_64.sh" | md5sum -c - && \
-    /bin/bash Miniconda3-py38_${MINICONDA_VERSION}-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
-    rm Miniconda3-py38_${MINICONDA_VERSION}-Linux-x86_64.sh && \
-    echo "conda ${CONDA_VERSION}" >> $CONDA_DIR/conda-meta/pinned && \
-    conda config --system --prepend channels conda-forge && \
-    conda config --system --set auto_update_conda false && \
-    conda config --system --set show_channel_urls true && \
-    conda config --system --set channel_priority strict && \
-    if [ ! $PYTHON_VERSION = 'default' ]; then conda install --yes python=$PYTHON_VERSION; fi && \
-    conda list python | grep '^python ' | tr -s ' ' | cut -d '.' -f 1,2 | sed 's/$/.*/' >> $CONDA_DIR/conda-meta/pinned && \
-    conda install --quiet --yes conda && \
-    conda install --quiet --yes pip && \
-    conda update --all --quiet --yes && \
-    conda clean --all -f -y && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-
-# Install Tini
-RUN conda install --quiet --yes 'tini=0.18.0' && \
-    conda list tini | grep tini | tr -s ' ' | cut -d ' ' -f 1,2 >> $CONDA_DIR/conda-meta/pinned && \
-    conda clean --all -f -y && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-
 # Install Jupyter Notebook, Lab, and Hub
 # Generate a notebook server config
-# Cleanup temporary files
-# Correct permissions
-# Do all this in a single RUN command to avoid duplicating all of the
-# files across image layers when the permissions change
-RUN conda install --quiet --yes \
-    'notebook=6.1.3' \
-    'jupyterhub=1.1.0' \
-    'jupyterlab=2.2.5' && \
-    conda clean --all -f -y && \
-    npm cache clean --force && \
+
+RUN pip install --upgrade pip && \
+    pip install nodejs readline ipywidgets jupyter jupyterlab && \
     jupyter notebook --generate-config && \
-    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
-    fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
 EXPOSE 8888
 
 # Configure container startup
-ENTRYPOINT ["tini", "-g", "--"]
+ENTRYPOINT ["/usr/bin/tini", "-g", "--"]
 CMD ["start-notebook.sh"]
 
 # Copy local files as late as possible to avoid cache busting
