@@ -47,22 +47,20 @@ ENV CONDA_DIR=/opt/conda \
     LANGUAGE=en_US.UTF-8
 ENV HOME=/home/$NB_USER
 
-WORKDIR /tmp
-
 # Install Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 # https://github.com/kidig/rpi-jupyter-lab/blob/master/Dockerfile
 ENV TINI_VERSION=0.18.0
 ENV CFLAGS="-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37"
-
+WORKDIR /tmp
 ADD https://github.com/krallin/tini/archive/v${TINI_VERSION}.tar.gz v${TINI_VERSION}.tar.gz
-RUN tar zxvf v${TINI_VERSION}.tar.gz \
-        && cd tini-${TINI_VERSION} \
-        && cmake . \
-        && make \
-        && cp tini /usr/bin/. \
-        && cd .. \
-        && rm -rf "./tini-${TINI_VERSION}" \
-        && rm "./v${TINI_VERSION}.tar.gz"
+RUN tar zxvf v${TINI_VERSION}.tar.gz
+WORKDIR /tmp/tini-${TINI_VERSION}
+RUN cmake . \
+    && make \
+    && cp tini /usr/bin/. \
+    && cd .. \
+    && rm -rf "./tini-${TINI_VERSION}" \
+    && rm "./v${TINI_VERSION}.tar.gz"
 
 # Copy a script that we will use to correct permissions after running certain commands
 COPY fix-permissions /usr/local/bin/fix-permissions
@@ -90,6 +88,7 @@ RUN mkdir /home/$NB_USER/work && \
 # Install Jupyter Notebook, Lab, and Hub
 # Generate a notebook server config
 
+# hadolint ignore=DL3013
 RUN pip install --upgrade pip && \
     pip install nodejs readline ipywidgets jupyter jupyterlab && \
     jupyter notebook --generate-config && \
