@@ -55,12 +55,9 @@ WORKDIR /tmp
 ADD https://github.com/krallin/tini/archive/v${TINI_VERSION}.tar.gz v${TINI_VERSION}.tar.gz
 RUN tar zxvf v${TINI_VERSION}.tar.gz
 WORKDIR /tmp/tini-${TINI_VERSION}
-RUN cmake . \
-    && make \
-    && cp tini /usr/bin/. \
-    && cd .. \
-    && rm -rf "./tini-${TINI_VERSION}" \
-    && rm "./v${TINI_VERSION}.tar.gz"
+RUN cmake . && make && cp tini /usr/bin/.
+WORKDIR /tmp
+RUN rm -rf "./tini-${TINI_VERSION}" && rm "./v${TINI_VERSION}.tar.gz"
 
 # Copy a script that we will use to correct permissions after running certain commands
 COPY fix-permissions /usr/local/bin/fix-permissions
@@ -91,6 +88,7 @@ RUN mkdir /home/$NB_USER/work && \
 # hadolint ignore=DL3013
 RUN pip install --upgrade pip && \
     pip install nodejs readline ipywidgets jupyter jupyterlab && \
+    npm install -g yarn && \
     jupyter notebook --generate-config && \
     fix-permissions /home/$NB_USER
 
