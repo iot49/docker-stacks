@@ -14,6 +14,12 @@ This fork is an attempt to port a subset of the official stacks to a multi-archi
 
 If you do not need to run notebook servers on ARM computers, use the [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/).
 
+## Supported Stacks
+
+- base-notebook
+
+## Quick Start
+
 ## Alternatives
 
 - [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/)

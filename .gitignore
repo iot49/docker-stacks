@@ -72,4 +72,4 @@ dockerspawner.tar.gz
 .envrc
 .direnv/
 _*/
-docker-compose
+docker-compose.yml
