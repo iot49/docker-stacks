@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 .PHONY: docs help test
 
+# Drop arch
 SHELL:=bash
 OWNER?=ttmetro
 
