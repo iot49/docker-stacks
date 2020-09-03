@@ -103,7 +103,7 @@ RUN pip install jupyter
 RUN pip install jupyterlab
 
 # hadolint ignore=DL3013,DL3016
-RUN npm install -g yarn
+# RUN npm install -g yarn
 RUN jupyter notebook --generate-config
 RUN fix-permissions /home/$NB_USER
 
