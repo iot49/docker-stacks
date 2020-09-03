@@ -1,53 +1,54 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-ARG BASE_CONTAINER=jupyter/minimal-notebook
+ARG BASE_CONTAINER=ttmetro/minimal-notebook
 FROM $BASE_CONTAINER
 
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
+LABEL maintainer="IoT49 Project <boser@berkeley.edu>"
 
 USER root
 
 # ffmpeg for matplotlib anim & dvipng for latex labels
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg dvipng && \
+    apt-get install -y --no-install-recommends \
+    # numpy needs these
+    libhdf5-dev liblapack-dev gfortran \
+    ffmpeg dvipng && \
     rm -rf /var/lib/apt/lists/*
 
-USER $NB_UID
-
 # Install Python 3 packages
-RUN conda install --quiet --yes \
-    'beautifulsoup4=4.9.*' \
-    'conda-forge::blas=*=openblas' \
-    'bokeh=2.1.*' \
-    'bottleneck=1.3.*' \
-    'cloudpickle=1.5.*' \
-    'cython=0.29.*' \
-    'dask=2.20.*' \
-    'dill=0.3.*' \
-    'h5py=2.10.*' \
-    'hdf5=1.10.*' \
-    'ipywidgets=7.5.*' \
-    'ipympl=0.5.*'\
-    'matplotlib-base=3.2.*' \
+# hadolint ignore=DL3013
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir --no-warn-script-location \
+    # requests numpy scipy scikit-learn nltk pandas seaborn tables matplotlib
+    'beautifulsoup4==4.9.*' \
+    # I don't know how to install or use this
+    # 'pythran-openblas==0.3.6' \
+    'bokeh==2.1.*' \
+    'bottleneck==1.3.*' \
+    'cloudpickle==1.5.*' \
+    'cython==0.29.*' \
+    'dask==2.20.*' \
+    'dill==0.3.*' \
+    'h5py==2.10.*' \
+    # 'hdf5' \
+    'ipympl==0.5.*'\
+    'matplotlib' \
     # numba update to 0.49 fails resolving deps.
-    'numba=0.48.*' \
-    'numexpr=2.7.*' \
-    'pandas=1.1.*' \
-    'patsy=0.5.*' \
-    'protobuf=3.12.*' \
-    'pytables=3.6.*' \
-    'scikit-image=0.17.*' \
-    'scikit-learn=0.23.*' \
-    'scipy=1.5.*' \
-    'seaborn=0.10.*' \
-    'sqlalchemy=1.3.*' \
-    'statsmodels=0.11.*' \
-    'sympy=1.6.*' \
-    'vincent=0.4.*' \
-    'widgetsnbextension=3.5.*'\
-    'xlrd=1.2.*' \
+    'numba==0.48.*' \
+    'numexpr==2.7.*' \
+    'pandas==1.1.*' \
+    'patsy==0.5.*' \
+    'protobuf==3.12.*' \
+    # 'pytables==3.6.*' \
+    'scikit-image==0.17.*' \
+    'scikit-learn==0.23.*' \
+    'scipy==1.5.*' \
+    'seaborn==0.10.*' \
+    'tables' \
+    'vincent==0.4.*' \
+    'widgetsnbextension==3.5.*' \
+    'xlrd==1.2.*' \
     && \
-    conda clean --all -f -y && \
     # Activate ipywidgets extension in the environment that runs the notebook server
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     # Also activate ipywidgets extension for JupyterLab
@@ -61,7 +62,6 @@ RUN conda install --quiet --yes \
     npm cache clean --force && \
     rm -rf "/home/${NB_USER}/.cache/yarn" && \
     rm -rf "/home/${NB_USER}/.node-gyp" && \
-    fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
 # Install facets which does not have a pip or conda package at the moment
@@ -69,10 +69,9 @@ WORKDIR /tmp
 RUN git clone https://github.com/PAIR-code/facets.git && \
     jupyter nbextension install facets/facets-dist/ --sys-prefix && \
     rm -rf /tmp/facets && \
-    fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Import matplotlib the first time to build the font cache.
+# Import matplotlib to build the font cache.
 ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
 
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
