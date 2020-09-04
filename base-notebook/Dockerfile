@@ -98,6 +98,9 @@ RUN pip install --upgrade pip && \
         importlib-metadata oauthlib pamela pycosat pycurl python-editor \
         python-json-logger requests SQLAlchemy \
     && \
+    # Hmm, this goes to /home/jovyan/.jupyter/jupyter_notebook_config.py
+    # and will be masked by -v ...:/home/jovyan
+    # Needed?
     jupyter notebook --generate-config && \
     fix-permissions /home/$NB_USER
 

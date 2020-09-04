@@ -11,7 +11,7 @@ OWNER?=ttmetro
 ALL_STACKS:=base-notebook \
 	minimal-notebook \
 	scipy-notebook
-ALL_STACKS=base-notebook minimal-notebook
+ALL_STACKS=scipy-notebook
 
 ALL_IMAGES:=$(ALL_STACKS)
 
@@ -62,7 +62,7 @@ buildx-all-amd64: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx-amd64/$(I) ) 
 buildx-test-all-amd64: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx-amd64/$(I) test/$(I) ) ## build and test all stacks
 
 buildx/%: DARGS?=
-buildx/%: ## buildx for $(PLATORMS) multi-architecture, image pushed to DockerHub
+buildx/%: ## buildx for $(PLATFORMS) multi-architecture, image pushed to DockerHub
 	docker buildx build $(DARGS) \
 		--platform $(PLATFORMS) --push \
 		--rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
@@ -182,8 +182,9 @@ run-sudo/%: ## run a bash in interactive mode as root in a stack
 	docker run -it --rm -u root $(DARGS) $(OWNER)/$(notdir $@) $(SHELL)
 
 test/%: ## run tests against a stack (only common tests or common tests + specific tests)
-	@echo "Tests disabled - FIX THIS!"
-	# @if [ ! -d "$(notdir $@)/test" ]; then TEST_IMAGE="$(OWNER)/$(notdir $@)" pytest -m "not info" test; \
-	# else TEST_IMAGE="$(OWNER)/$(notdir $@)" pytest -m "not info" test $(notdir $@)/test; fi
+	@echo "Tests disabled - FIX THIS! $(notdir $@)"
+
+# @if [ ! -d "$(notdir $@)/test" ]; then TEST_IMAGE="$(OWNER)/$(notdir $@)" pytest -m "not info" test; \
+# else TEST_IMAGE="$(OWNER)/$(notdir $@)" pytest -m "not info" test $(notdir $@)/test; fi
 
 test-all: $(foreach I,$(ALL_IMAGES),test/$(I)) ## test all stacks

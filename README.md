@@ -22,9 +22,13 @@ If you do not need to run notebook servers on ARM computers, use the [Official J
 
 ## Quick Start
 
+From the console:
+
 ```bash
-docker -p 8888:8888 ttmetro/base-notebook
+docker -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v <...>:/home/jovyan ttmetro/minimal-notebook
 ```
+
+Replace `<...>` with the path to the directory where notebooks and the jupyter customizations (e.g. additional kernels and libraries) will be stored.
 
 ### docker-compose
 
@@ -42,11 +46,10 @@ services:
             - GRANT_SUDO=yes
             - NB_UID=1000
         volumes:
-            - <folder on host where notebooks will be stored>:/home/jovyan
+            - <...>:/home/jovyan
         ports:
             - "8888:8888"
         restart: on-failure
-
 ```
 
 ### Customizations: pip, kernels, Jupyter Lab Extensions
@@ -67,7 +70,7 @@ services:
 ## Limitations
 
 - No version control for installed libraries. Library versions change from build to build and may differ for different architectures of the same image.
-- Some packages included with the [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/) are missing. Either install from the command line or raise an issue.
+- Some packages included with the [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/) are missing. Install from the command line (`pip`) or create a custom docker image (for `apt`, which won't persist).
 - Run `pip list` and `apt list` from the command line for a listing of installed packages and their versions.
 - Automated tests performed only on the `linux/amd64` image (presently disabled, need updating). 
 - The multi-architecture image is pushed to DockerHub without automated tests.
