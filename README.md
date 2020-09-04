@@ -57,7 +57,7 @@ services:
 - Automated tests performed only on the `linux/amd64` image (presently disabled, need updating). 
 - The multi-architecture image is pushed to DockerHub without automated tests.
 - `buildx` uses the `qemu` emulator and is quite slow (taking hours to build the docker images). To speed things up, limit the build to just the images that require updating. E.g. to just rebuild `scipy-notebook`, set `ALL_STACKS=scipy-notebook` in the `Makefile`.
-- Presently only images for `linux/amd64` and `linux/arm/v7`. Change the `PLATFORMS` variable in the `Makefile` to add other architectures.
+- Presently only images are built for `linux/amd64` and `linux/arm/v7`. Change the `PLATFORMS` variable in the `Makefile` to add other architectures.
 
 ## Resources
 
