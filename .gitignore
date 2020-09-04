@@ -71,5 +71,6 @@ dockerspawner.tar.gz
 
 .envrc
 .direnv/
+*.bak
 _*/
 docker-compose.yml
