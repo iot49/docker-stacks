@@ -42,12 +42,27 @@ services:
             - GRANT_SUDO=yes
             - NB_UID=1000
         volumes:
-            - <folder on host where notebooks will be stored>:/home/jovyan/work
+            - <folder on host where notebooks will be stored>:/home/jovyan
         ports:
             - "8888:8888"
         restart: on-failure
 
 ```
+
+### Customizations: pip, kernels, Jupyter Lab Extensions
+
+- Mount host folder on `/home/jovyan`
+- `pip install --user <package>` 
+    - installs to `/home/jovyan/.local`, which persists
+    - without the `--user` flag, installed packages go to `/usr/local`, which does *NOT* persist
+    - `pip list -v` shows package folder locations
+- `python -m sshkernel install --user`
+    - like `pip`, use `--user` for install to persist
+    - `jupyter kernelspec list` shows installed kernel locations
+- Jupyter Lab Extensions
+    - install from UI
+    - they persist
+- The login token also persists
 
 ## Limitations
 
@@ -56,7 +71,7 @@ services:
 - Run `pip list` and `apt list` from the command line for a listing of installed packages and their versions.
 - Automated tests performed only on the `linux/amd64` image (presently disabled, need updating). 
 - The multi-architecture image is pushed to DockerHub without automated tests.
-- `buildx` uses the `qemu` emulator and is quite slow (taking hours to build the docker images). To speed things up, limit the build to just the images that require updating. E.g. to just rebuild `scipy-notebook`, set `ALL_STACKS=scipy-notebook` in the `Makefile`.
+- `buildx` uses the `qemu` emulator and is very slow (taking hours to build the docker images). To speed things up, limit the build to just the images that require updating. E.g. to just rebuild `scipy-notebook`, set `ALL_STACKS=scipy-notebook` in the `Makefile`.
 - Presently only images are built for `linux/amd64` and `linux/arm/v7`. Change the `PLATFORMS` variable in the `Makefile` to add other architectures.
 
 ## Resources

@@ -44,15 +44,17 @@ RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash - && \
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
-# Configure environment
-ENV SHELL=/bin/bash \
+# Configure environment (CONDA_DIR points to pip install dir)
+ENV CONDA_DIR=/usr/local \
+    SHELL=/bin/bash \
     NB_USER=$NB_USER \
     NB_UID=$NB_UID \
     NB_GID=$NB_GID \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8
-ENV HOME=/home/$NB_USER
+ENV PATH=/home/$NB_USER/.local/bin:$CONDA_DIR/bin:$PATH \
+    HOME=/home/$NB_USER
 
 # Install Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 # https://github.com/kidig/rpi-jupyter-lab/blob/master/Dockerfile
@@ -79,21 +81,19 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     sed -i.bak -e 's/^%admin/#%admin/' /etc/sudoers && \
     sed -i.bak -e 's/^%sudo/#%sudo/' /etc/sudoers && \
     useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+    chown $NB_USER:$NB_GID $CONDA_DIR && \
     chmod g+w /etc/passwd && \
+    fix-permissions $CONDA_DIR && \
     fix-permissions $HOME
-
-# Install Jupyter Notebook, Lab (as root to be available when container is run as --root)
-# hadolint ignore=DL3013
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir  jupyter jupyterlab
 
 USER $NB_UID
 WORKDIR $HOME
 
 # Add libraries and generate a notebook server config
 # hadolint ignore=DL3013
-RUN pip install --user --upgrade pip && \
-    pip install --user \
+RUN pip install --upgrade pip && \
+    pip install \
+        jupyter jupyterlab \
         readline async-generator backcall blinker cryptography \
         importlib-metadata oauthlib pamela pycosat pycurl python-editor \
         python-json-logger requests SQLAlchemy \
@@ -101,9 +101,6 @@ RUN pip install --user --upgrade pip && \
     jupyter notebook --generate-config && \
     fix-permissions /home/$NB_USER
 
-# Setup work directory for backward-compatibility
-RUN mkdir /home/$NB_USER/work && \
-    fix-permissions /home/$NB_USER
 
 EXPOSE 8888
 
