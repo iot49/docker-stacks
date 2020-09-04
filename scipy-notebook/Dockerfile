@@ -19,35 +19,7 @@ RUN apt-get update && \
 # hadolint ignore=DL3013
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --no-warn-script-location \
-    # requests numpy scipy scikit-learn nltk pandas seaborn tables matplotlib
-    'beautifulsoup4==4.9.*' \
-    # I don't know how to install or use this
-    # 'pythran-openblas==0.3.6' \
-    'bokeh==2.1.*' \
-    'bottleneck==1.3.*' \
-    'cloudpickle==1.5.*' \
-    'cython==0.29.*' \
-    'dask==2.20.*' \
-    'dill==0.3.*' \
-    'h5py==2.10.*' \
-    # 'hdf5' \
-    'ipympl==0.5.*'\
-    'matplotlib' \
-    # numba update to 0.49 fails resolving deps.
-    'numba==0.48.*' \
-    'numexpr==2.7.*' \
-    'pandas==1.1.*' \
-    'patsy==0.5.*' \
-    'protobuf==3.12.*' \
-    # 'pytables==3.6.*' \
-    'scikit-image==0.17.*' \
-    'scikit-learn==0.23.*' \
-    'scipy==1.5.*' \
-    'seaborn==0.10.*' \
-    'tables' \
-    'vincent==0.4.*' \
-    'widgetsnbextension==3.5.*' \
-    'xlrd==1.2.*' \
+    numpy scipy sympy pandas smatplotlib \
     && \
     # Activate ipywidgets extension in the environment that runs the notebook server
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
