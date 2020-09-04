@@ -21,10 +21,10 @@ RUN pip install --upgrade pip && \
         # numpy scipy sympy pandas \
         # ipywidgets jupyterlab-git \
     && \
-    fix-permissions $HOME
+    fix-permissions "/home/${NB_USER}"
 
 # Import matplotlib to build the font cache.
-ENV XDG_CACHE_HOME=$HOME/.cache/
+ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
 
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
-    fix-permissions $HOME
+    fix-permissions "/home/${NB_USER}"
