@@ -8,20 +8,20 @@ LABEL maintainer="IoT49 Project <boser@berkeley.edu>"
 USER root
 
 # ffmpeg for matplotlib anim & dvipng for latex labels
+# libhdf5-dev liblapack-dev gfortran for numpy
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    # numpy needs these
-    libhdf5-dev liblapack-dev gfortran \
-    ffmpeg dvipng && \
+        ffmpeg dvipng \
+        libhdf5-dev liblapack-dev gfortran && \
     rm -rf /var/lib/apt/lists/*
 
 USER $NB_UID
 
 # hadolint ignore=DL3013
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir --no-warn-script-location \
-    numpy scipy sympy pandas matplotlib \
-    ipywidgets jupyterlab-git \
+RUN pip install --user --upgrade pip && \
+    pip install --user \
+        numpy scipy sympy pandas matplotlib \
+        ipywidgets jupyterlab-git \
     && \
     # Activate ipywidgets extension in the environment that runs the notebook server
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \

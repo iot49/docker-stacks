@@ -51,7 +51,7 @@ services:
 
 ## Limitations
 
-- No version control for installed libraries. Library versions change from build to build and may differ for different architectures of the same image. Specify a tag with the docker image to get consistent results.
+- No version control for installed libraries. Library versions change from build to build and may differ for different architectures of the same image.
 - Some packages included with the [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/) are missing. Either install from the command line or raise an issue.
 - Run `pip list` and `apt list` from the command line for a listing of installed packages and their versions.
 - Automated tests performed only on the `linux/amd64` image (presently disabled, need updating). 
