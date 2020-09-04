@@ -54,8 +54,10 @@ services:
 - No version control for installed libraries. Library versions change from build to build and may differ for different architectures of the same image. Specify a tag with the docker image to get consistent results.
 - Some packages included with the [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/) are missing. Either install from the command line or raise an issue.
 - Run `pip list` and `apt list` from the command line for a listing of installed packages and their versions.
-- Automated tests performed only on the linux/amd64 image (presently disabled, need updating). 
+- Automated tests performed only on the `linux/amd64` image (presently disabled, need updating). 
 - The multi-architecture image is pushed to DockerHub without automated tests.
+- `buildx` uses the `qemu` emulator and is quite slow (taking hours to build the docker images). To speed things up, limit the build to just the images that require updating. E.g. to just rebuild `scipy-notebook`, set `ALL_STACKS=scipy-notebook` in the `Makefile`.
+- Presently only images for `linux/amd64` and `linux/arm/v7`. Change the `PLATFORMS` variable in the `Makefile` to add other architectures.
 
 ## Resources
 
