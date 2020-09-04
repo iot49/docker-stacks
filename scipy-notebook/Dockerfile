@@ -15,11 +15,13 @@ RUN apt-get update && \
     ffmpeg dvipng && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Python 3 packages
+USER $NB_UID
+
 # hadolint ignore=DL3013
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --no-warn-script-location \
     numpy scipy sympy pandas matplotlib \
+    ipywidgets jupyterlab-git \
     && \
     # Activate ipywidgets extension in the environment that runs the notebook server
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \

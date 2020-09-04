@@ -45,8 +45,7 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
 # Configure environment
-ENV CONDA_DIR=/opt/conda \
-    SHELL=/bin/bash \
+ENV SHELL=/bin/bash \
     NB_USER=$NB_USER \
     NB_UID=$NB_UID \
     NB_GID=$NB_GID \
@@ -83,21 +82,24 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     chmod g+w /etc/passwd && \
     fix-permissions $HOME
 
-# Install Jupyter Notebook, Lab, and Hub
-# Generate a notebook server config
-
-# hadolint ignore=DL3013,DL3016
-RUN pip install --upgrade pip && \
-    pip install --no-warn-script-location readline ipywidgets jupyter jupyterlab && \
-    pip install --no-warn-script-location \
-        async-generator backcall blinker cryptography importlib-metadata oauthlib \
-        pamela pycosat pycurl python-editor python-json-logger requests SQLAlchemy \
-    && \
-    jupyter notebook --generate-config && \
-    fix-permissions /home/$NB_USER
+# Install Jupyter Notebook, Lab (as root to be available when container is run as --root)
+# hadolint ignore=DL3013
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir  jupyter jupyterlab
 
 USER $NB_UID
 WORKDIR $HOME
+
+# Add libraries and generate a notebook server config
+# hadolint ignore=DL3013
+RUN pip install --user --upgrade pip && \
+    pip install --user \
+        readline async-generator backcall blinker cryptography \
+        importlib-metadata oauthlib pamela pycosat pycurl python-editor \
+        python-json-logger requests SQLAlchemy \
+    && \
+    jupyter notebook --generate-config && \
+    fix-permissions /home/$NB_USER
 
 # Setup work directory for backward-compatibility
 RUN mkdir /home/$NB_USER/work && \

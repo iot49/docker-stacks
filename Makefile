@@ -11,7 +11,7 @@ OWNER?=ttmetro
 ALL_STACKS:=base-notebook \
 	minimal-notebook \
 	scipy-notebook
-ALL_STACKS=scipy-notebook
+ALL_STACKS=base-notebook
 
 ALL_IMAGES:=$(ALL_STACKS)
 
