@@ -19,7 +19,7 @@ USER $NB_UID
 RUN pip install --upgrade pip && \
     pip install \
         pytest hypothesis \
-        numpy scipy matplotlib-base
+        numpy scipy matplotlib
         # pandas sympy
 
 # Import matplotlib to build the font cache.
