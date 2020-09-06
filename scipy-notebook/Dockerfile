@@ -9,13 +9,13 @@ USER root
 # scipy with apt (never managed to build from pip with qemu)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        ffmpeg dvipng \
-        libhdf5-dev liblapack-dev gfortran && \
+        ffmpeg dvipng && \
+        # libhdf5-dev liblapack-dev gfortran && \
     rm -rf /var/lib/apt/lists/*
 
 USER $NB_UID
 
-ENV PATH=/home/$NB_USER/.local/bin:$CONDA_DIR/bin:$PATH
+# ENV PATH=/home/$NB_USER/.local/bin:$CONDA_DIR/bin:$PATH
 
 # Add libraries and generate a notebook server config
 # hadolint ignore=DL3013

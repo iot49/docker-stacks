@@ -1,7 +1,7 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 
-# Modified for multi-architecture build (Conda --> pip).
+# BEB 9/2020: Modified for multi-architecture build (Conda --> pip).
 
 FROM python:3.8-buster
 
@@ -89,6 +89,10 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
 USER $NB_UID
 WORKDIR $HOME
 
+# Setup work directory for backward-compatibility
+RUN mkdir /home/$NB_USER/work && \
+    fix-permissions /home/$NB_USER
+    
 # Add libraries and generate a notebook server config
 # hadolint ignore=DL3013
 RUN pip install --upgrade pip && \
@@ -103,7 +107,6 @@ RUN pip install --upgrade pip && \
     # Needed?
     jupyter notebook --generate-config && \
     fix-permissions /home/$NB_USER
-
 
 EXPOSE 8888
 

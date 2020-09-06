@@ -11,7 +11,8 @@ OWNER?=ttmetro
 ALL_STACKS:=base-notebook \
 	minimal-notebook \
 	scipy-notebook
-ALL_STACKS=scipy-notebook
+ALL_STACKS=base-notebook \
+	minimal-notebook
 
 ALL_IMAGES:=$(ALL_STACKS)
 
@@ -56,7 +57,7 @@ buildx-amd64/%: ## buildx for linux/amd64 single architecture, image stored loca
 		--platform linux/amd64 --load \
 		--rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
 	@echo -n "Built image size: "
-	@docker images $(OWNER)/$(notdir $@):latest --format "{{.Size}}"
+	@docker images $(OWNER)/$(notdir $@) --format "{{.Size}}"
 
 buildx-all-amd64: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx-amd64/$(I) ) ## build all stacks
 buildx-test-all-amd64: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx-amd64/$(I) test/$(I) ) ## build and test all stacks
@@ -65,9 +66,9 @@ buildx/%: DARGS?=
 buildx/%: ## buildx for $(PLATFORMS) multi-architecture, image pushed to DockerHub
 	docker buildx build $(DARGS) \
 		--platform $(PLATFORMS) --push \
-		--rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
+		--rm --force-rm -t $(OWNER)/$(notdir $@) ./$(notdir $@)
 	@echo -n "Built image size: "
-	@docker images $(OWNER)/$(notdir $@):latest --format "{{.Size}}"
+	@docker images $(OWNER)/$(notdir $@) --format "{{.Size}}"
 
 buildx-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx/$(I) ) ## build all stacks
 buildx-test-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx/$(I) test/$(I) ) ## build and test all stacks
