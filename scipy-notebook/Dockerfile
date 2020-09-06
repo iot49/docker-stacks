@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ffmpeg dvipng && \
         # numpy for ARM does not include these
-        gfortran libopenblas-dev liblapack-dev && \
+        libhdf5-dev liblapack-dev gfortran && \
     rm -rf /var/lib/apt/lists/*
 
 USER $NB_UID
