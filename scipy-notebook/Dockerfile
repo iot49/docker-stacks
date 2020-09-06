@@ -5,10 +5,10 @@ LABEL maintainer="IoT49 Project <boser@berkeley.edu>"
 USER root
 
 # ffmpeg for matplotlib anim & dvipng for latex labels
+# libhdf5-dev liblapack-dev gfortran for numpy on ARM
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        ffmpeg dvipng && \
-        # numpy for ARM does not include these
+        ffmpeg dvipng \
         libhdf5-dev liblapack-dev gfortran && \
     rm -rf /var/lib/apt/lists/*
 

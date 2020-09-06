@@ -89,9 +89,6 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
 USER $NB_UID
 WORKDIR $HOME
 
-# Setup user path (for pip)
-ENV PATH=/home/$NB_USER/.local/bin:$PATH
-
 # Setup work directory for backward-compatibility
 RUN mkdir /home/$NB_USER/work && \
     fix-permissions /home/$NB_USER
@@ -127,5 +124,8 @@ RUN fix-permissions /etc/jupyter/
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
+
+# Setup user path (for pip)
+ENV PATH=/home/$NB_USER/.local/bin:$PATH
 
 WORKDIR $HOME
