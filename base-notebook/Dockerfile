@@ -53,7 +53,7 @@ ENV CONDA_DIR=/usr/local \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8
-ENV PATH=/home/$NB_USER/.local/bin:$CONDA_DIR/bin:$PATH \
+ENV PATH=$CONDA_DIR/bin:$PATH \
     HOME=/home/$NB_USER
 
 # Install Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
@@ -88,6 +88,9 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
 
 USER $NB_UID
 WORKDIR $HOME
+
+# Setup user path (for pip)
+ENV PATH=/home/$NB_USER/.local/bin:$PATH
 
 # Setup work directory for backward-compatibility
 RUN mkdir /home/$NB_USER/work && \
