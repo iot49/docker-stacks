@@ -10,9 +10,7 @@ USER root
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ffmpeg dvipng \
-        libhdf5-dev liblapack-dev gfortran \
-        python3-numpy python3-scipy python3-matplotlib \
-        python3-pandas python3-sympy && \
+        libhdf5-dev liblapack-dev gfortran && \
     rm -rf /var/lib/apt/lists/*
 
 USER $NB_UID
@@ -22,7 +20,7 @@ ENV PATH=/home/$NB_USER/.local/bin:$CONDA_DIR/bin:$PATH
 # Add libraries and generate a notebook server config
 # hadolint ignore=DL3013
 RUN pip install --upgrade pip && \
-    pip install pytest
+    pip install pytest numpy
 
 # Import matplotlib to build the font cache.
 ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
