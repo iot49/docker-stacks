@@ -11,8 +11,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ffmpeg dvipng \
         libhdf5-dev liblapack-dev gfortran \
-        python-numpy python-scipy python-matplotlib \
-        python-pandas python-sympy && \
+        python3-numpy python3-scipy python3-matplotlib \
+        python3-pandas python3-sympy && \
     rm -rf /var/lib/apt/lists/*
 
 USER $NB_UID
@@ -27,5 +27,5 @@ RUN pip install --upgrade pip && \
 # Import matplotlib to build the font cache.
 ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
 
-RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
-    fix-permissions "/home/${NB_USER}"
+#RUN MPLBACKEND=Agg python -c "sys.path.append('/usr/lib/python3/dist-packages/'); import matplotlib.pyplot" && \
+#    fix-permissions "/home/${NB_USER}"
