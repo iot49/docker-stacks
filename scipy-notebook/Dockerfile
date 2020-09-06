@@ -19,10 +19,11 @@ USER $NB_UID
 RUN pip install --upgrade pip && \
     pip install \
         pytest hypothesis \
-        numpy scipy matplotlib-base pandas sympy
+        numpy scipy matplotlib-base
+        # pandas sympy
 
 # Import matplotlib to build the font cache.
 ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
 
-# RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
-#   fix-permissions "/home/${NB_USER}"
+RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
+    fix-permissions "/home/${NB_USER}"

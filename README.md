@@ -20,12 +20,14 @@ If you do not need to run notebook servers on ARM computers, use the [Official J
 - minimal-notebook
 - scipy-notebook
 
+Some libraries that are included in the "official stacks" are missing. Run `pip list` and `apt list` from the command line for a listing of installed packages and their versions.
+
 ## Quick Start
 
 From the console:
 
 ```bash
-docker -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v <...>:/home/jovyan ttmetro/minimal-notebook
+docker -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v <...>:/home/jovyan ttmetro/scipy-notebook
 ```
 
 Replace `<...>` with the path to the directory where notebooks and the jupyter customizations (e.g. additional kernels and libraries) will be stored.
@@ -52,27 +54,45 @@ services:
         restart: on-failure
 ```
 
-### Customizations: pip, kernels, Jupyter Lab Extensions
+The combination of the `user: root` and `GRANT_SUDO=yes` grant password less `sudo` from the console. Remove if not required.
 
-- Mount host folder on `/home/jovyan`
-- `pip install --user <package>` 
-    - installs to `/home/jovyan/.local`, which persists
-    - without the `--user` flag, installed packages go to `/usr/local`, which does *NOT* persist
-    - `pip list -v` shows package folder locations
-- `python -m sshkernel install --user`
-    - like `pip`, use `--user` for install to persist
-    - `jupyter kernelspec list` shows installed kernel locations
-- Jupyter Lab Extensions
-    - install from UI
-    - they persist
-- The login token also persists
+## Customizations
+
+It is possible to install additional features into a running docker container.
+
+### Pip
+
+The additional content can be either installed into the container or on the host (if a volume is mounted on `/home/jovyan`). For the latter case, specify the `--user` options with `pip`.
+
+```
+pip install [--user] <package>
+```
+
+- with `--user`, installs to `/home/jovyan/.local`
+- without the `--user` flag, installed packages go to `/usr/local`
+- `pip list -v` shows package folder locations
+
+### Kernels
+
+Check the kernel documentation for installation instructions. E.g.
+
+```
+pip install --user iot-kernel
+python -m iot_kernel.install --user`
+jupyter kernelspec list
+```
+
+A browser page refresh may be needed before new kernels are shown in the Launcher.
+
+### Jupyter Lab Extensions
+
+These can be installed from the Jupyter Lab UI.
 
 ## Limitations
 
 - No version control for installed libraries. Library versions change from build to build and may differ for different architectures of the same image.
-- Some packages included with the [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/) are missing. Install from the command line (`pip`) or create a custom docker image (for `apt`, which won't persist).
-- Run `pip list` and `apt list` from the command line for a listing of installed packages and their versions.
-- Automated tests performed only on the `linux/amd64` image (presently disabled, need updating). 
+- Some packages included with the [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/) are missing. Additional content can be installed with `pip` or `apt`, or in a derived Dockerfile.
+- Automated tests are disabled pending rewite of the testing harness.
 - The multi-architecture image is pushed to DockerHub without automated tests.
 - `buildx` uses the `qemu` emulator and is very slow (taking hours to build the docker images). To speed things up, limit the build to just the images that require updating. E.g. to just rebuild `scipy-notebook`, set `ALL_STACKS=scipy-notebook` in the `Makefile`.
 - Presently only images are built for `linux/amd64` and `linux/arm/v7`. Change the `PLATFORMS` variable in the `Makefile` to add other architectures.
