@@ -18,18 +18,18 @@ If you do not need to run notebook servers on ARM computers, use the [Official J
 
 - base-notebook
 - minimal-notebook
-- scipy-numpy-notebook
+- *scipy-numpy-notebook*
     - minimal-notebook plus `numpy, scipy`
-- scipy-matplotlib-notebook
-    - scipy-numpy-notebook plus `nmatplotlib`
+- *scipy-matplotlib-notebook*
+    - scipy-numpy-notebook plus `matplotlib`
 - scipy-notebook
     - scipy-matplotlib-notebook plus `pandas, sympy`
 - iot-notebook: scipy-notebook plus
-    - iot-kernel
-    - javascript and typescript kernels
+    - [iot-kernel](https://github.com/iot49/iot-kernel)
+    - [javascript and typescript kernels](https://github.com/yunabe/tslab)
     - several jupyterlab extensions (check from jupyterlab extension manager)
 
-Some libraries that are included in the "official stacks" are missing. Run `pip list` and `apt list` from the command line for a listing of installed packages and their versions.
+Some libraries that are included in the "official stacks" are missing. Run `pip list -v` and `apt list` from the command line for a listing of installed packages and their versions.
 
 ## Quick Start
 
@@ -67,7 +67,7 @@ The combination of the `user: root` and `GRANT_SUDO=yes` grant password less `su
 
 ## Customizations
 
-It is possible to install additional features into a running docker container.
+It is possible to install additional features from within a running docker container (using e.g. the Terminal).
 
 ### Pip
 
