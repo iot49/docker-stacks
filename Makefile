@@ -7,7 +7,7 @@ SHELL:=bash
 ARCH:=$(shell uname -m)
 OWNER?=ttmetro
 
-# Need to list the images in build dependency order 
+# Need to list the images in build dependency order
 ALL_STACKS:=base-notebook \
 	minimal-notebook \
 	scipy-numpy-notebook \
