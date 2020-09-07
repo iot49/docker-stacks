@@ -49,13 +49,6 @@ jobs:
         # Buildx task below builds & pushes master image
         if: github.ref != 'refs/heads/master'
         run: make -C main buildx-test-all-amd64
-      - name: Run Post-Build Hooks
-        # Buildx task below builds & pushes master image
-        if: github.ref != 'refs/heads/master'
-        run: make -C main hook-all
-        env:
-          COMMIT_MSG: "${{github.event.head_commit.message}}"
-          WIKI_PATH: ../wiki
       - name: Login to Docker Hub
         if: github.ref == 'refs/heads/master'
         run: >
