@@ -1,7 +1,7 @@
 # Copyright (c) IoT49 Project.
 # Distributed under the terms of the Modified BSD License.
 
-FROM ttmetro/minimal-notebook
+FROM ttmetro/scipy-numpy-notebook
 
 LABEL maintainer="IoT49 Project <boser@berkeley.edu>"
 
