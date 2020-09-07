@@ -18,7 +18,16 @@ If you do not need to run notebook servers on ARM computers, use the [Official J
 
 - base-notebook
 - minimal-notebook
+- scipy-numpy-notebook
+    - minimal-notebook plus `numpy, scipy`
+- scipy-matplotlib-notebook
+    - scipy-numpy-notebook plus `nmatplotlib`
 - scipy-notebook
+    - scipy-matplotlib-notebook plus `pandas, sympy`
+- iot-notebook: scipy-notebook plus
+    - iot-kernel
+    - javascript and typescript kernels
+    - several jupyterlab extensions (check from jupyterlab extension manager)
 
 Some libraries that are included in the "official stacks" are missing. Run `pip list` and `apt list` from the command line for a listing of installed packages and their versions.
 
@@ -62,7 +71,7 @@ It is possible to install additional features into a running docker container.
 
 ### Pip
 
-The additional content can be either installed into the container or on the host (if a volume is mounted on `/home/jovyan`). For the latter case, specify the `--user` options with `pip`.
+The additional content can be either installed into the container or on the host (if a volume is mounted on `/home/jovyan`). For the latter case, specify the `--user` option with `pip`.
 
 ```
 pip install [--user] <package>
@@ -86,7 +95,7 @@ A browser page refresh may be needed before new kernels are shown in the Launche
 
 ### Jupyter Lab Extensions
 
-These can be installed from the Jupyter Lab UI.
+These can be installed/removed from the Jupyter Lab Extension Manager.
 
 ## Limitations
 
@@ -94,7 +103,7 @@ These can be installed from the Jupyter Lab UI.
 - Some packages included with the [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/) are missing. Additional content can be installed with `pip` or `apt`, or in a derived Dockerfile.
 - Automated tests are disabled pending rewite of the testing harness.
 - The multi-architecture image is pushed to DockerHub without automated tests.
-- `buildx` uses the `qemu` emulator and is very slow (taking hours to build the docker images). To speed things up, limit the build to just the images that require updating. E.g. to just rebuild `scipy-notebook`, set `ALL_STACKS=scipy-notebook` in the `Makefile`.
+- `buildx` uses the `qemu` emulator and is very slow (taking hours to build the docker images). To speed things up, limit the build to just the images that require updating. E.g. to just rebuild `scipy-notebook`, set `ALL_STACKS=scipy-notebook` in the `Makefile`. The `scipy-notebook` has been split into several images to reduce the build time for each stage.
 - Presently only images are built for `linux/amd64` and `linux/arm/v7`. Change the `PLATFORMS` variable in the `Makefile` to add other architectures.
 
 ## Resources

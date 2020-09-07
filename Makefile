@@ -10,8 +10,11 @@ OWNER?=ttmetro
 # Need to list the images in build dependency order
 ALL_STACKS:=base-notebook \
 	minimal-notebook \
-	scipy-notebook
-ALL_STACKS=scipy-notebook
+	scipy-numpy-notebook \
+	scipy-matplotlib-notebook \
+	scipy-notebook \
+	iot-notebook
+ALL_STACKS=scipy-numpy-notebook
 
 ALL_IMAGES:=$(ALL_STACKS)
 
