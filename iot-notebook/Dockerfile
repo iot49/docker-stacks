@@ -38,7 +38,8 @@ RUN jupyter labextension install @jupyterlab/toc --no-build && \
     # jupyter labextension install @ijmbarr/jupyterlab_spellchecker --no-build
     # jupyter labextension install @aquirdturtle/collapsible_headings --no-build
     # jupyter labextension install @krassowski/jupyterlab-lsp --no-build
-    jupyter lab build -y && \
+    # --dev-build and --minimize reduce memory requirements
+    jupyter lab build -y --dev-build=False --minimize=False && \
     jupyter lab clean -y && \
     npm cache clean --force  && \
     rm -rf "/home/${NB_USER}/.cache/yarn" && \

@@ -65,10 +65,20 @@ buildx-all-amd64: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx-amd64/$(I) ) 
 buildx-test-all-amd64: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) buildx-amd64/$(I) test/$(I) ) ## build and test all stacks
 
 buildx/%: DARGS?=
+buildx/%: export GITHUB_SHA?=$(shell git rev-parse HEAD)
+buildx/%: export GITHUB_SHA_TAG?=$(shell git rev-parse HEAD | cut -c 1-12)
 buildx/%: ## buildx for $(PLATFORMS) multi-architecture, image pushed to DockerHub
+	@echo Build $(OWNER)/$(notdir $@):${GITHUB_SHA_TAG} for $(PLATFORMS)
 	docker buildx build $(DARGS) \
 		--platform $(PLATFORMS) --push \
-		--rm --force-rm -t $(OWNER)/$(notdir $@) ./$(notdir $@)
+		--rm --force-rm \
+		--build-arg	BUILD_TIMESTAMP="$$(date -u +%FT%TZ)" \
+		--build-arg	DOCKER_REPO="$(OWNER)/$(notdir $@)" \
+		--build-arg	IMAGE_NAME="$(OWNER)/$(notdir $@):latest" \
+		--build-arg	IMAGE_SHORT_NAME="$(notdir $@)" \
+		--tag $(OWNER)/$(notdir $@):${GITHUB_SHA_TAG} \
+		--tag $(OWNER)/$(notdir $@):latest \
+		./$(notdir $@)
 	@echo -n "Built image size: "
 	@docker images $(OWNER)/$(notdir $@) --format "{{.Size}}"
 
