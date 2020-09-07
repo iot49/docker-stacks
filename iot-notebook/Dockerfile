@@ -29,25 +29,25 @@ RUN pip install --upgrade pip && \
         python-language-server[all] \
         jupyter-lsp
 
-# fails in user space
-USER root
-
-RUN jupyter labextension install @jupyterlab/toc --no-build && \
-    # out of memory in lab build on linux/arm7
-    # jupyter labextension install jupyter-matplotlib --no-build 
-    # jupyter labextension install @ijmbarr/jupyterlab_spellchecker --no-build
-    # jupyter labextension install @aquirdturtle/collapsible_headings --no-build
-    # jupyter labextension install @krassowski/jupyterlab-lsp --no-build
-    # --dev-build and --minimize reduce memory requirements
-    jupyter lab build -y --dev-build=False --minimize=False && \
-    jupyter lab clean -y && \
-    npm cache clean --force  && \
-    rm -rf "/home/${NB_USER}/.cache/yarn" && \
-    rm -rf "/home/${NB_USER}/.node-gyp" && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-USER $NB_UID
+# DISABLED: jupyter lab build fails on linux/arm7 with memory error
+# install labextensions from the UI
+# USER root
+# 
+# RUN jupyter labextension install @jupyterlab/toc --no-build && \
+#     jupyter labextension install jupyter-matplotlib --no-build && \
+#     jupyter labextension install @ijmbarr/jupyterlab_spellchecker --no-build && \
+#     jupyter labextension install @aquirdturtle/collapsible_headings --no-build && \
+#     jupyter labextension install @krassowski/jupyterlab-lsp --no-build && \
+#     # --dev-build and --minimize reduce memory requirements
+#     jupyter lab build -y --dev-build=False --minimize=False && \
+#     jupyter lab clean -y && \
+#     npm cache clean --force  && \
+#     rm -rf "/home/${NB_USER}/.cache/yarn" && \
+#     rm -rf "/home/${NB_USER}/.node-gyp" && \
+#     fix-permissions "${CONDA_DIR}" && \
+#     fix-permissions "/home/${NB_USER}"
+# 
+# USER $NB_UID
 
 # Install iot_kernel - last (frequent changes)
 # hadolint ignore=DL3013
