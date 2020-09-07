@@ -20,7 +20,7 @@ If you do not need to run notebook servers on ARM computers, use the [Official J
 - minimal-notebook
 - *scipy-numpy-notebook (build time: 2h 20m)*
     - minimal-notebook plus `numpy, scipy`
-- *scipy-matplotlib-notebook*
+- *scipy-matplotlib-notebook (build time: 30m)*
     - scipy-numpy-notebook plus `matplotlib`
 - scipy-notebook
     - scipy-matplotlib-notebook plus `pandas, sympy`
@@ -40,6 +40,8 @@ docker -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v <...>:/home/jovyan ttmetro/scip
 ```
 
 Replace `<...>` with the path to the directory where notebooks and the jupyter customizations (e.g. additional kernels and libraries) will be stored.
+
+**Note:** `/home/jovyan` is also used to store system files (e.g. custom `pip` installs in `.local`, cache files in `.cache`, etc). Issues may arise if these files are shared between different systems (e.g. the same host folders is mounted into different Jupyter Notebook Servers). If this is a concern, mount the host volume to `/home/jovyan/work` instead.
 
 ### docker-compose
 
