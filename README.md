@@ -22,7 +22,7 @@ If you do not need to run notebook servers on ARM computers, use the [Official J
     - minimal-notebook plus `numpy, scipy`
 - *scipy-matplotlib-notebook (build time: 30m)*
     - scipy-numpy-notebook plus `matplotlib`
-- scipy-notebook
+- scipy-notebook *(build time: 2h)*
     - scipy-matplotlib-notebook plus `pandas, sympy`
 - iot-notebook: scipy-notebook plus
     - [iot-kernel](https://github.com/iot49/iot-kernel)

@@ -7,6 +7,7 @@ LABEL maintainer="IoT49 Project <boser@berkeley.edu>"
 
 USER root
 
+# hadolint ignore=DL3016
 RUN apt-get update && apt-get install -yq --no-install-recommends \
         software-properties-common \
         gettext \
@@ -20,6 +21,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
 USER $NB_UID
 
 # Jupyter(lab) extensions
+# hadolint ignore=DL3013, SC2102
 RUN pip install --upgrade pip && \ 
     pip install \ 
         jupyter_contrib_nbextensions \
@@ -45,6 +47,7 @@ RUN jupyter labextension install jupyter-matplotlib --no-build && \
 USER $NB_UID
 
 # Install iot_kernel - last (frequent changes)
+# hadolint ignore=DL3013
 RUN pip install iot-kernel && \
     python -m iot_kernel.install --prefix /usr/local
 
