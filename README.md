@@ -16,15 +16,15 @@ If you do not need to run notebook servers on ARM computers, use the [Official J
 
 ## Supported Stacks
 
-- base-notebook
-- minimal-notebook
+- base-notebook *(build time: 20m)*
+- minimal-notebook  *(build time: 15m)*
 - *scipy-numpy-notebook (build time: 2h 20m)*
     - minimal-notebook plus `numpy, scipy`
 - *scipy-matplotlib-notebook (build time: 30m)*
     - scipy-numpy-notebook plus `matplotlib`
 - scipy-notebook *(build time: 2h)*
     - scipy-matplotlib-notebook plus `pandas, sympy`
-- iot-notebook: scipy-notebook plus
+- iot-notebook *(build time: 30m):* scipy-notebook plus
     - [iot-kernel](https://github.com/iot49/iot-kernel)
     - [javascript and typescript kernels](https://github.com/yunabe/tslab)
     - several jupyterlab extensions (check from jupyterlab extension manager)
@@ -110,7 +110,10 @@ These can be installed/removed from the Jupyter Lab Extension Manager.
 
 ## Resources
 
+<!--
 - [Issue Tracker on GitHub](https://github.com/iot49/docker-stacks)
 - [Jupyter Discourse Q&A](https://discourse.jupyter.org/c/questions)
-- [Jupyter Website](https://jupyter.org)
+-->
 - [Images on DockerHub](https://hub.docker.com/u/ttmetro)
+- [Jupyter Website](https://jupyter.org)
+- [JupyterLab Server on Raspberry Pi](https://github.com/kidig/rpi-jupyter-lab)

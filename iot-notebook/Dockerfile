@@ -29,16 +29,18 @@ RUN pip install --upgrade pip && \
         python-language-server[all] \
         jupyter-lsp
 
+# fails in user space
 USER root
 
-RUN jupyter labextension install jupyter-matplotlib --no-build && \
-    jupyter labextension install @jupyterlab/toc --no-build && \
-    jupyter labextension install @ijmbarr/jupyterlab_spellchecker --no-build && \
-    jupyter labextension install @aquirdturtle/collapsible_headings --no-build && \
-    jupyter labextension install @krassowski/jupyterlab-lsp --no-build && \
+RUN jupyter labextension install @jupyterlab/toc --no-build && \
+    # out of memory in lab build on linux/arm7
+    # jupyter labextension install jupyter-matplotlib --no-build 
+    # jupyter labextension install @ijmbarr/jupyterlab_spellchecker --no-build
+    # jupyter labextension install @aquirdturtle/collapsible_headings --no-build
+    # jupyter labextension install @krassowski/jupyterlab-lsp --no-build
     jupyter lab build -y && \
     jupyter lab clean -y && \
-    npm cache clean --force && \
+    npm cache clean --force  && \
     rm -rf "/home/${NB_USER}/.cache/yarn" && \
     rm -rf "/home/${NB_USER}/.node-gyp" && \
     fix-permissions "${CONDA_DIR}" && \
