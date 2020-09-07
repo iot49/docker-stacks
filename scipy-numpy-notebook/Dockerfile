@@ -17,15 +17,8 @@ RUN apt-get update && \
 
 USER $NB_UID
 
-# Add libraries and generate a notebook server config
 # hadolint ignore=DL3013
 RUN pip install --upgrade pip && \
     pip install \
         pytest hypothesis \
-        numpy scipy matplotlib
-
-# Import matplotlib to build the font cache.
-ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
-
-RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
-    fix-permissions "/home/${NB_USER}"
+        numpy scipy
