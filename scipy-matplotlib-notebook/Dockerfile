@@ -9,7 +9,7 @@ USER $NB_UID
 
 # hadolint ignore=DL3013
 RUN pip install --upgrade pip && \
-    pip matplotlib
+    pip install matplotlib
 
 # Import matplotlib to build the font cache.
 ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"

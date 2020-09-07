@@ -18,7 +18,7 @@ If you do not need to run notebook servers on ARM computers, use the [Official J
 
 - base-notebook
 - minimal-notebook
-- *scipy-numpy-notebook*
+- *scipy-numpy-notebook (build time: 2h 20m)*
     - minimal-notebook plus `numpy, scipy`
 - *scipy-matplotlib-notebook*
     - scipy-numpy-notebook plus `matplotlib`
