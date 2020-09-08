@@ -15,7 +15,7 @@ docker tag $IMAGE_NAME "$DOCKER_REPO:${HUB_VERSION_TAG%%\r}"
 
 # Update index
 INDEX_FILE="${WIKI_PATH}/Home.md"
-INDEX_ROW="|\`${BUILD_TIMESTAMP}\`|\`ttmetro/${IMAGE_SHORT_NAME}:${GIT_SHA_TAG}\`<br />\`|[Git diff](https://github.com/ttmetro/docker-stacks/commit/${GITHUB_SHA})<br />[Dockerfile](https://github.com/ttmetro/docker-stacks/blob/${GITHUB_SHA}/${IMAGE_SHORT_NAME}/Dockerfile)<br />[Build manifest](./${IMAGE_SHORT_NAME}-${GIT_SHA_TAG})|"
+INDEX_ROW="|\`${BUILD_TIMESTAMP}\`|\`ttmetro/${IMAGE_SHORT_NAME}:${GIT_SHA_TAG}\`<br />\`|[Git diff](https://github.com/iot49/docker-stacks/commit/${GITHUB_SHA})<br />[Dockerfile](https://github.com/iot49/docker-stacks/blob/${GITHUB_SHA}/${IMAGE_SHORT_NAME}/Dockerfile)<br />[Build manifest](./${IMAGE_SHORT_NAME}-${GIT_SHA_TAG})|"
 echo "/|-|/a ${INDEX_ROW}" -i "$INDEX_FILE"
 sed "/|-|/a ${INDEX_ROW}" -i "$INDEX_FILE"
 
@@ -31,7 +31,7 @@ cat << EOF > "$MANIFEST_FILE"
 * Python version: ${PY_VERSION_TAG}
 * Jupyter Notebook version: ${NB_VERSION_TAG}
 * Jupyter Lab version: ${NB_VERSION_TAG}
-* Git commit SHA: [${GITHUB_SHA}](https://github.com/ttmetro/docker-stacks/commit/${GITHUB_SHA})
+* Git commit SHA: [${GITHUB_SHA}](https://github.com/iot49/docker-stacks/commit/${GITHUB_SHA})
 * Git commit message:
 \`\`\`
 ${COMMIT_MSG}
