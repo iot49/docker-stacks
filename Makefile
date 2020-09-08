@@ -138,27 +138,6 @@ hook/%: ## run post-build hooks for an image
 
 hook-all: $(foreach I,$(ALL_IMAGES),hook/$(I) ) ## run post-build hooks for all images
 
-wiki/%: export WIKI_PATH?=../wiki
-wiki/%: export GITHUB_SHA?=$(shell git rev-parse HEAD)
-wiki/%: export GITHUB_SHA_TAG?=$(shell git rev-parse HEAD | cut -c 1-12)
-wiki/%: export BUILD_TIMESTAMP=$(shell date -u +%FT%TZ)
-wiki/%: export IMAGE_SHORT_NAME=$(OWNER)/$(notdir $@)
-wiki/%: export PY_VERSION_TAG="PY"
-wiki/%: export NB_VERSION_TAG="NB"
-wiki/%: export LAB_VERSION_TAG="LAB"
-wiki/%: export HUB_VERSION_TAG
-wiki/%: ## Update wiki
-	INDEX_FILE="${WIKI_PATH}/Home.md"
-	@echo "|\`${BUILD_TIMESTAMP}\`|\`ttmetro/${IMAGE_SHORT_NAME}:${GITHUB_SHA_TAG}\`<br /> \
-		\`ttmetro/${IMAGE_SHORT_NAME}:${PY_VERSION_TAG}\`<br /> \
-		\`ttmetro/${IMAGE_SHORT_NAME}:${NB_VERSION_TAG}\`<br /> \
-		\`ttmetro/${IMAGE_SHORT_NAME}:${LAB_VERSION_TAG}\`<br /> \
-		\`ttmetro/${IMAGE_SHORT_NAME}:${HUB_VERSION_TAG}\`| \
-		[Git diff](https://github.com/ttmetro/docker-stacks/commit/${GITHUB_SHA})<br /> \
-		[Dockerfile](https://github.com/ttmetro/docker-stacks/blob/${GITHUB_SHA}/${IMAGE_SHORT_NAME}/Dockerfile)<br /> \
-		[Build manifest](./${IMAGE_SHORT_NAME}-${GIT_SHA_TAG})|"
-	# @sed "/|-|/a ${INDEX_ROW}" -i "${INDEX_FILE}"
-
 img-clean: img-rm-dang img-rm ## clean dangling and jupyter images
 
 img-list: ## list jupyter images
