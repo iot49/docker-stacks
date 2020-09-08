@@ -57,6 +57,12 @@ jobs:
       - name: Push Images to DockerHub
         if: github.ref == 'refs/heads/master'
         run: make -C main buildx-all
+      - name: Run Post-Build Hooks
+        if: github.ref == 'refs/heads/master'
+        run: make -C main hook-all
+        env:
+          COMMIT_MSG: "${{github.event.head_commit.message}}"
+          WIKI_PATH: ../wiki
       - name: Push Wiki to GitHub
         if: github.ref == 'refs/heads/master'
         # Pass GITHUB_REPOSITORY directly to avoid conflict with GitHub Actions built-in env var

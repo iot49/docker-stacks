@@ -30,11 +30,7 @@ $(docker run --rm ${IMAGE_NAME} python --version)
 \`\`\`
 
 \`\`\`
-$(docker run --rm ${IMAGE_NAME} conda info)
-\`\`\`
-
-\`\`\`
-$(docker run --rm ${IMAGE_NAME} conda list)
+$(docker run --rm ${IMAGE_NAME} pip list)
 \`\`\`
 
 ## Apt Packages
