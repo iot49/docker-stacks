@@ -15,7 +15,7 @@ docker tag $IMAGE_NAME "$DOCKER_REPO:${HUB_VERSION_TAG%%\r}"
 
 # Update index
 INDEX_FILE="${WIKI_PATH}/Home.md"
-INDEX_ROW="|\`${BUILD_TIMESTAMP}\`|\`jupyter/${IMAGE_SHORT_NAME}:${GIT_SHA_TAG}\`<br />\`jupyter/${IMAGE_SHORT_NAME}:${PY_VERSION_TAG}\`<br />\`jupyter/${IMAGE_SHORT_NAME}:${NB_VERSION_TAG}\`<br />\`jupyter/${IMAGE_SHORT_NAME}:${LAB_VERSION_TAG}\`<br />\`jupyter/${IMAGE_SHORT_NAME}:${HUB_VERSION_TAG}\`|[Git diff](https://github.com/jupyter/docker-stacks/commit/${GITHUB_SHA})<br />[Dockerfile](https://github.com/jupyter/docker-stacks/blob/${GITHUB_SHA}/${IMAGE_SHORT_NAME}/Dockerfile)<br />[Build manifest](./${IMAGE_SHORT_NAME}-${GIT_SHA_TAG})|"
+INDEX_ROW="|\`${BUILD_TIMESTAMP}\`|\`ttmetro/${IMAGE_SHORT_NAME}:${GIT_SHA_TAG}\`<br />\`|[Git diff](https://github.com/ttmetro/docker-stacks/commit/${GITHUB_SHA})<br />[Dockerfile](https://github.com/ttmetro/docker-stacks/blob/${GITHUB_SHA}/${IMAGE_SHORT_NAME}/Dockerfile)<br />[Build manifest](./${IMAGE_SHORT_NAME}-${GIT_SHA_TAG})|"
 echo "/|-|/a ${INDEX_ROW}" -i "$INDEX_FILE"
 sed "/|-|/a ${INDEX_ROW}" -i "$INDEX_FILE"
 
@@ -28,7 +28,10 @@ cat << EOF > "$MANIFEST_FILE"
 * Build datetime: ${BUILD_TIMESTAMP}
 * Docker image: ${DOCKER_REPO}:${GIT_SHA_TAG}
 * Docker image size: $(docker images ${IMAGE_NAME} --format "{{.Size}}")
-* Git commit SHA: [${GITHUB_SHA}](https://github.com/jupyter/docker-stacks/commit/${GITHUB_SHA})
+* Python version: ${PY_VERSION_TAG}
+* Jupyter Notebook version: ${NB_VERSION_TAG}
+* Jupyter Lab version: ${NB_VERSION_TAG}
+* Git commit SHA: [${GITHUB_SHA}](https://github.com/ttmetro/docker-stacks/commit/${GITHUB_SHA})
 * Git commit message:
 \`\`\`
 ${COMMIT_MSG}
