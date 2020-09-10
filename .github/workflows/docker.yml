@@ -43,6 +43,20 @@ jobs:
           make -C main dev-env lint-install
       - name: Lint Dockerfiles
         run: make -C main lint-all
+      - name: Set Up docker buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
+      - name: Build Docker Images
+        # Buildx task below builds & pushes master image
+        if: github.ref != 'refs/heads/master'
+        run: make -C main buildx-test-all-amd64
+      - name: Login to Docker Hub
+        if: github.ref == 'refs/heads/master'
+        run: >
+          echo '${{secrets.DOCKERHUB_PASSWORD}}' | docker login --username
+          '${{secrets.DOCKERHUB_USERNAME}}' --password-stdin
+      - name: Push Images to DockerHub
+        if: github.ref == 'refs/heads/master'
+        run: make -C main buildx-all
       - name: Run Post-Build Hooks
         if: github.ref == 'refs/heads/master'
         run: make -C main hook-all
