@@ -55,7 +55,7 @@ jobs:
           echo '${{secrets.DOCKERHUB_PASSWORD}}' | docker login --username
           '${{secrets.DOCKERHUB_USERNAME}}' --password-stdin
       - name: Push Images to DockerHub
-        if: github.ref == 'refs/heads/masterNO'
+        if: github.ref == 'refs/heads/master'
         run: make -C main buildx-all
       - name: Run Post-Build Hooks
         if: github.ref == 'refs/heads/master'
