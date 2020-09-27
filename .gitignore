@@ -74,3 +74,4 @@ dockerspawner.tar.gz
 *.bak
 _*/
 docker-compose.yml
+*.code-workspace
