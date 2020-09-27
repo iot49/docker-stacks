@@ -10,7 +10,7 @@ HUB_VERSION_TAG="hub-$(docker run --rm -a STDOUT ${IMAGE_NAME} jupyterhub --vers
 
 # Update index
 INDEX_FILE="${WIKI_PATH}/Home.md"
-INDEX_ROW="|\`${BUILD_TIMESTAMP}\`|\`ttmetro/${IMAGE_SHORT_NAME}:${GIT_SHA_TAG}\`<br />\`|[Git diff](https://github.com/iot49/docker-stacks/commit/${GITHUB_SHA})<br />[Dockerfile](https://github.com/iot49/docker-stacks/blob/${GITHUB_SHA}/${IMAGE_SHORT_NAME}/Dockerfile)<br />[Build manifest](./${IMAGE_SHORT_NAME}-${GIT_SHA_TAG})|"
+INDEX_ROW="|\`${BUILD_TIMESTAMP}\`|ttmetro/${IMAGE_SHORT_NAME}:${GIT_SHA_TAG}\`<br />\`|[Git diff](https://github.com/iot49/docker-stacks/commit/${GITHUB_SHA})<br />[Dockerfile](https://github.com/iot49/docker-stacks/blob/${GITHUB_SHA}/${IMAGE_SHORT_NAME}/Dockerfile)<br />[Build manifest](./${IMAGE_SHORT_NAME}-${GIT_SHA_TAG})|"
 echo "/|-|/a ${INDEX_ROW}" -i "$INDEX_FILE"
 sed "/|-|/a ${INDEX_ROW}" -i "$INDEX_FILE"
 
