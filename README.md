@@ -2,7 +2,7 @@
 [![Discourse badge](https://img.shields.io/discourse/https/discourse.jupyter.org/users.svg?color=%23f37626)](https://discourse.jupyter.org/c/questions "Jupyter Discourse Q&A")
 [![Read the Docs badge](https://img.shields.io/readthedocs/jupyter-docker-stacks.svg)](https://jupyter-docker-stacks.readthedocs.io/en/latest/ "Documentation build status")
 [![DockerHub badge](https://images.microbadger.com/badges/version/jupyter/base-notebook.svg)](https://microbadger.com/images/jupyter/base-notebook "Recent tag/version of jupyter/base-notebook")
-[![Binder badget](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyter/docker-stacks/master?filepath=README.ipynb "Launch a jupyter/base-notebook container on mybinder.org")
+[![Binder badge](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyter/docker-stacks/master?filepath=README.ipynb "Launch a jupyter/base-notebook container on mybinder.org")
 --->
 
 # Jupyter Multi-Architecture Docker Stacks
@@ -27,7 +27,6 @@ If you do not need to run notebook servers on ARM computers, use the [Official J
 - iot-notebook *(build time: 30m):* scipy-notebook plus
     - [iot-kernel](https://github.com/iot49/iot-kernel)
     - [javascript and typescript kernels](https://github.com/yunabe/tslab)
-    - several jupyterlab extensions (check from jupyterlab extension manager)
 
 Some libraries that are included in the "official stacks" are missing. Run `pip list -v` and `apt list` from the command line for a listing of installed packages and their versions.
 
@@ -103,17 +102,16 @@ These can be installed/removed from the Jupyter Lab Extension Manager.
 
 - No version control for installed libraries. Library versions change from build to build and may differ for different architectures of the same image.
 - Some packages included with the [Official Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/) are missing. Additional content can be installed with `pip` or `apt`, or in a derived Dockerfile.
+- No pre-installed jupyter extensions (arm build fails). Install from UI.
 - Automated tests are disabled pending rewite of the testing harness.
 - The multi-architecture image is pushed to DockerHub without automated tests.
 - `buildx` uses the `qemu` emulator and is very slow (taking hours to build the docker images). To speed things up, limit the build to just the images that require updating. E.g. to just rebuild `scipy-notebook`, set `ALL_STACKS=scipy-notebook` in the `Makefile`. The `scipy-notebook` has been split into several images to reduce the build time for each stage.
 - Presently only images are built for `linux/amd64` and `linux/arm/v7`. Change the `PLATFORMS` variable in the `Makefile` to add other architectures.
+- Wiki manifest for `amd64` architecture only (since it's necessary to run the container on the appropriate machine)
 
 ## Resources
 
-<!--
 - [Issue Tracker on GitHub](https://github.com/iot49/docker-stacks)
-- [Jupyter Discourse Q&A](https://discourse.jupyter.org/c/questions)
--->
 - [Images on DockerHub](https://hub.docker.com/u/ttmetro)
 - [Jupyter Website](https://jupyter.org)
 - [JupyterLab Server on Raspberry Pi](https://github.com/kidig/rpi-jupyter-lab)
