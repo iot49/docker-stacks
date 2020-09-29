@@ -14,7 +14,7 @@ ALL_STACKS:=base-notebook \
 	scipy-matplotlib-notebook \
 	scipy-notebook \
 	iot-notebook
-ALL_STACKS=minimal-notebook
+ALL_STACKS=scipy-numpy-notebook
 
 ALL_IMAGES:=$(ALL_STACKS)
 
