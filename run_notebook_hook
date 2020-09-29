@@ -1,0 +1,50 @@
+#!/bin/bash
+set -e
+
+# Apply tags
+GIT_SHA_TAG=${GITHUB_SHA:0:12}
+PY_VERSION_TAG="python-$(docker run ${IMAGE_NAME} python --version 2>/dev/null | awk '{print $2}')"
+NB_VERSION_TAG="notebook-$(docker run -a STDOUT ${IMAGE_NAME} jupyter-notebook --version | tr -d '\r')"
+LAB_VERSION_TAG="lab-$(docker run -a STDOUT ${IMAGE_NAME} jupyter-lab --version | tr -d '\r')"
+HUB_VERSION_TAG="hub-$(docker run -a STDOUT ${IMAGE_NAME} jupyterhub --version | tr -d '\r')"
+
+# Update index
+INDEX_FILE="${WIKI_PATH}/Home.md"
+INDEX_ROW="|\`${BUILD_TIMESTAMP}\`|\`ttmetro/${IMAGE_SHORT_NAME}:${GIT_SHA_TAG}\`<br/>|[Build manifest](./${IMAGE_SHORT_NAME}-${GIT_SHA_TAG})<br/>[Dockerfile](https://github.com/iot49/docker-stacks/blob/${GITHUB_SHA}/${IMAGE_SHORT_NAME}/Dockerfile)<br/>[Git diff](https://github.com/iot49/docker-stacks/commit/${GITHUB_SHA})|"
+echo "/|-|/a ${INDEX_ROW}" -i "$INDEX_FILE"
+sed "/|-|/a ${INDEX_ROW}" -i "$INDEX_FILE"
+
+# Build manifest
+MANIFEST_FILE="${WIKI_PATH}/manifests/${IMAGE_SHORT_NAME}-${GIT_SHA_TAG}.md"
+mkdir -p $(dirname "$MANIFEST_FILE")
+echo "$MANIFEST_FILE"
+
+cat << EOF > "$MANIFEST_FILE"
+* Build datetime: ${BUILD_TIMESTAMP}
+* Docker image: ${DOCKER_REPO}:${GIT_SHA_TAG}
+* Docker image size: $(docker images ${IMAGE_NAME} --format "{{.Size}}")
+* Python version: ${PY_VERSION_TAG}
+* Jupyter Notebook version: ${NB_VERSION_TAG}
+* Jupyter Lab version: ${NB_VERSION_TAG}
+* Git commit SHA: [${GITHUB_SHA}](https://github.com/iot49/docker-stacks/commit/${GITHUB_SHA})
+* Git commit message:
+\`\`\`
+${COMMIT_MSG}
+\`\`\`
+
+## Python Packages
+
+\`\`\`
+$(docker run --rm ${IMAGE_NAME} python --version)
+\`\`\`
+
+\`\`\`
+$(docker run --rm ${IMAGE_NAME} pip list)
+\`\`\`
+
+## Apt Packages
+
+\`\`\`
+$(docker run --rm ${IMAGE_NAME} apt list --installed)
+\`\`\`
+EOF

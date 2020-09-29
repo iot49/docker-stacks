@@ -14,7 +14,7 @@ ALL_STACKS:=base-notebook \
 	scipy-matplotlib-notebook \
 	scipy-notebook \
 	iot-notebook
-ALL_STACKS=scipy-notebook
+ALL_STACKS=base-notebook
 
 ALL_IMAGES:=$(ALL_STACKS)
 
@@ -134,7 +134,7 @@ hook/%: ## run post-build hooks for an image
 	DOCKER_REPO="$(OWNER)/$(notdir $@)" \
 	IMAGE_NAME="$(OWNER)/$(notdir $@):latest" \
 	IMAGE_SHORT_NAME="$(notdir $@)" \
-	$(SHELL) $(notdir $@)/hooks/run_hook
+	$(SHELL) run_notebook_hook
 
 hook-all: $(foreach I,$(ALL_IMAGES),hook/$(I) ) ## run post-build hooks for all images
 
